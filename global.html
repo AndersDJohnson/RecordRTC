@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>RecordRTC: Global</title>
+    
+    <meta name="description" content="RecordRTC is a server-less (entire client-side) JavaScript library can be used to record WebRTC audio/video media streams. It supports cross-browser audio/video recording." />
+	<meta name="keywords" content="webrtc, recordrtc, record-rtc, web-rtc, audio-recording, video-recording, gif-recording, audio/video recording" />
+    
+    <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan">
+    <meta name="author" content="Muaz Khan">
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    
+    <link rel="stylesheet" href="https://cdn.webrtc-experiment.com/style.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    
+    <style>
+        blockquote {
+            padding: 0;
+        }
+        pre {
+            font-size: 15px;
+            padding: 0;
+        }
+        header {
+            border-bottom: 1px solid #ddd;
+            margin: -39px;
+            margin-bottom: auto;
+        }
+    </style>
+    
+    <link rel="alternate" type="application/rss+xml" title="Muaz Khan Feed" href="http://feeds.feedburner.com/muazkh">
+</head>
+
+<body>
+
+<div id="main">
+    
+
+
+
+
+<section>
+
+<article>
+    <header style="text-align: center;">
+        <h1>Global</h1>            
+        <p>
+            <span> &copy; </span>
+            <a href="http://www.MuazKhan.com/">Muaz Khan</a>
+            . <a href="http://twitter.com/WebRTCWeb" title="Twitter profile for WebRTC Experiments">@WebRTCWeb</a>
+            . <a href="https://github.com/muaz-khan?tab=repositories"title="Github Profile">Github</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/issues?state=open">Latest issues</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/commits/master">What's New?</a>
+        </p>
+    </header>
+        
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="DiskStorage"><span class="type-signature"></span>DiskStorage<span class="type-signature"></span></h4>
+
+    
+    <p class="summary">Writing blobs into IndexedDB.</p>
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        DiskStorage is a standalone object used by <a href="RecordRTC.html">RecordRTC</a> to store recorded blobs in IndexedDB storage.
+    </div>
+    
+
+    
+
+    
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>init</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This method must be called once to initialize IndexedDB ObjectStore. Though, it is auto-used internally.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Fetch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This method fetches stored blobs from IndexedDB.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Store</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This method stores blobs in IndexedDB.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This function is invoked for any known/unknown error.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dataStoreName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the ObjectStore created in IndexedDB storage.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2157">line 2157</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>DiskStorage.Store({    audioBlob: yourAudioBlob,    videoBlob: yourVideoBlob,    gifBlob  : yourGifBlob});DiskStorage.Fetch(function(dataURL, type) {    if(type == 'audioBlob') { }    if(type == 'videoBlob') { }    if(type == 'gifBlob')   { }});// DiskStorage.dataStoreName = 'recordRTC';// DiskStorage.onError = function(error) { };</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="Storage"><span class="type-signature"></span>Storage<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Storage is a standalone object used by <a href="RecordRTC.html">RecordRTC</a> to store reusable objects e.g. "new AudioContext".
+    </div>
+    
+
+    
+
+    
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>AudioContext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">webkitAudioContext</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Keeps a reference to AudioContext object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line890">line 890</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>Storage.AudioContext == webkitAudioContext</code></pre>
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    
+        <h4 class="name" id="bytesToSize"><span class="type-signature"></span>bytesToSize<span class="signature">(bytes)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>bytes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Pass bytes and get formafted string.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2454">line 2454</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    - formafted string
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>bytesToSize(1024*1024*5) == '5 GB'</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        <h4 class="name" id="mergeProps"><span class="type-signature"></span>mergeProps<span class="signature">(mergein, mergeto)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mergein</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Merge another object in this object.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mergeto</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Merge this object in another object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line846">line 846</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    - merged object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var mergedObject = mergeProps({}, {    x: 10, // this will be merged    y: 10, // this will be merged    add: function() {} // this will be skipped});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        <h4 class="name" id="reformatProps"><span class="type-signature"></span>reformatProps<span class="signature">(obj)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If a property name is "sample-rate"; it will be converted into "sampleRate".</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line868">line 868</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    - formatted object.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var mergedObject = reformatProps({    'sample-rate': 44100,    'buffer-size': 4096});mergedObject.sampleRate == 44100mergedObject.bufferSize == 4096</code></pre>
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="StereoRecorder.html">StereoRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#mergeProps">mergeProps</a></li><li><a href="global.html#reformatProps">reformatProps</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<a href="https://github.com/muaz-khan/RecordRTC" class="fork-left"></a>
+
+<footer>
+    <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a>
+    &copy; <a href="https://plus.google.com/+MuazKhan" rel="author" >Muaz Khan</a>
+    <a href="mailto:muazkh@gmail.com">muazkh@gmail.com</a>
+    <a href="https://github.com/muaz-khan">Github</a>
+    <a href="https://twitter.com/WebRTCWeb">@WebRTCWeb</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+
+<a href="https://plus.google.com/+WebRTC-Experiment" rel="publisher"></a>
+</body>
+</html>
