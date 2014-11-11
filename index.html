@@ -404,20 +404,41 @@ var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sampl
 <li><a href="https://dvcs.w3.org/hg/dap/raw-file/tip/media-stream-capture/MediaRecorder.html">MediaStream Recording</a></li>
 <li><a href="http://www.w3.org/TR/mediacapture-streams/">Media Capture and Streams</a></li>
 </ol>
-<h2>Contribute in Documentation</h2><pre class="prettyprint source"><code>npm install recordrtc.org
+<h2>Contribute in <a href="http://RecordRTC.org">RecordRTC.org</a></h2><p><a href="https://npmjs.org/package/recordrtc.org"><img src="https://img.shields.io/npm/v/recordrtc.org.svg" alt="npm"></a> <a href="https://npmjs.org/package/recordrtc.org"><img src="https://img.shields.io/npm/dm/recordrtc.org.svg" alt="downloads"></a></p>
+<p>http://recordrtc.org/ is a documentation webpage for <a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a>. It is <a href="https://github.com/muaz-khan/RecordRTC/tree/gh-pages">open-sourced in github</a> and everyone can collaborate to improve documentation.</p>
+<p>To contribute:</p>
+<ol>
+<li>You should modify <code>RecordRTC.js</code> file (aka <a href="https://github.com/muaz-khan/RecordRTC/blob/gh-pages/latest.js"><code>latest.js</code></a> file)</li>
+<li>You'll see that each function/property/method is having comments (format is chosen from http://usejsdoc.org/).</li>
+<li>Using <code>jsdoc</code> tool, you can generate documentation HTML pages from <code>latest.js</code> file</li>
+<li>You should NEVER modify HTML pages. You merely need to modify <code>latest.js</code> file for documentation.</li>
+</ol>
+<p>Steps to contribute:</p>
+<ol>
+<li>Modify <code>latest.js</code> file</li>
+<li>Use below NPM-commands to generate HTML pages.</li>
+<li>Manually copy/paste <code>latest.js</code> file in the resulting <code>recordrtc.org</code> directory</li>
+<li>Copy <code>recordrtc.org</code> directory and replace in <code>RecordRTC</code> github clone's <code>gh-pages</code> section</li>
+<li>Send a pull-request and done!</li>
+</ol>
+<pre class="prettyprint source"><code># First step: install recordrtc.org template and javascript file
+npm install recordrtc.org
 
-# here is how to generate HTML files
+# Second step: generate HTML files from template & latest.js file
 cd .\node_modules\recordrtc.org
 
+# This command generates HTML pages from latest.js file
 node_modules\.bin\jsdoc node_modules\recordrtc\RecordRTC.js -d .\..\..\recordrtc.org node_modules\recordrtc\README.md -t template</code></pre><p>Now you'll see a directory with name <code>recordrtc.org</code>.</p>
-<pre class="prettyprint source"><code>.\..\..\recordrtc.org\index.html</code></pre><p>Now, you should fork this repository:</p>
+<pre class="prettyprint source"><code># This command runs index.html file
+# You can use it to preview HTML pages (doc files)
+.\..\..\recordrtc.org\index.html</code></pre><h2>Send pull requests</h2><p>Now, you should fork this repository:</p>
 <ul>
-<li>https://github.com/muaz-khan/RecordRTC</li>
+<li><a href="https://github.com/muaz-khan/RecordRTC">https://github.com/muaz-khan/RecordRTC</a></li>
 </ul>
 <p>And push/pull <code>recordrtc.org</code> directory to <code>gh-pages</code>.</p>
-<p>RecordRTC is using comments format from jsdoc:</p>
+<h2>How to modify <code>latest.js</code> file?</h2><p>RecordRTC is using comments format from jsdoc:</p>
 <ul>
-<li>http://usejsdoc.org/</li>
+<li><a href="http://usejsdoc.org/">http://usejsdoc.org/</a></li>
 </ul>
 <p>E.g.</p>
 <pre class="prettyprint source lang-javascript"><code>/**
@@ -426,7 +447,20 @@ node_modules\.bin\jsdoc node_modules\recordrtc\RecordRTC.js -d .\..\..\recordrtc
 * @typedef Hello
 * @example
 * var some = new Something();
-*/</code></pre><h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="https://plus.google.com/+MuazKhan">Muaz Khan</a>.</p></article>
+*/</code></pre><p>Example - <a href="https://github.com/muaz-khan/RecordRTC/blob/gh-pages/latest.js#L206"><code>stopRecording</code></a> method:</p>
+<pre class="prettyprint source lang-javascript"><code>/**
+ * This method stops recording. It takes single &quot;callback&quot; argument. It is suggested to get blob or URI in the callback to make sure all encoders finished their jobs.
+ * @param {function} callback - This callback function is invoked after completion of all encoding jobs.
+ * @method
+ * @memberof RecordRTC
+ * @instance
+ * @example
+ * recordRTC.stopRecording(function(videoURL) {
+ *     video.src = videoURL;
+ * });
+ * @todo Implement &lt;code class=&quot;str&quot;>recordRTC.stopRecording().getDataURL(callback);&lt;/code>
+ */
+stopRecording: stopRecording,</code></pre><h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="https://plus.google.com/+MuazKhan">Muaz Khan</a>.</p></article>
     </section>
 
 
