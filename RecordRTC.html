@@ -87,7 +87,7 @@
 
     
     <div class="description">
-        RecordRTC is a JavaScript-based media-recording library for modern web-browsers (supporting WebRTC getUserMedia API). It is optimized for different devices and browsers to bring all client-side (pluginfree) recording solutions in single place.
+        <a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a> is a JavaScript-based media-recording library for modern web-browsers (supporting WebRTC getUserMedia API). It is optimized for different devices and browsers to bring all client-side (pluginfree) recording solutions in single place.
     </div>
     
 
@@ -139,7 +139,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line51">line 51</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line56">line 56</a>
     </li></ul></dd>
     
 
@@ -175,7 +175,12 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var recordRTC = RecordRTC(mediaStream, {    type: 'video' // audio or video or gif or canvas});// or, you can even use keyword "new"var recordRTC = new RecordRTC(mediaStream[, config]);</code></pre>
+    <pre class="prettyprint"><code>var recordRTC = RecordRTC(mediaStream, {
+    type: 'video' // audio or video or gif or canvas
+});
+
+// or, you can even use keyword "new"
+var recordRTC = new RecordRTC(mediaStream[, config]);</code></pre>
 
     
 </dd>
@@ -294,7 +299,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line360">line 360</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -311,7 +316,12 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var blob = recordRTC.blob;    // equivalent to: recordRTC.getBlob() method    var blob = recordRTC.getBlob();});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var blob = recordRTC.blob;
+
+    // equivalent to: recordRTC.getBlob() method
+    var blob = recordRTC.getBlob();
+});</code></pre>
 
     
 </dd>
@@ -410,7 +420,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line396">line 396</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line447">line 447</a>
     </li></ul></dd>
     
 
@@ -434,7 +444,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var buffer = recordRTC.buffer;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var buffer = recordRTC.buffer;
+});</code></pre>
 
     
 </dd>
@@ -533,7 +545,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line372">line 372</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line423">line 423</a>
     </li></ul></dd>
     
 
@@ -557,7 +569,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var bufferSize = recordRTC.bufferSize;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var bufferSize = recordRTC.bufferSize;
+});</code></pre>
 
     
 </dd>
@@ -656,7 +670,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line384">line 384</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line435">line 435</a>
     </li></ul></dd>
     
 
@@ -680,7 +694,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var sampleRate = recordRTC.sampleRate;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var sampleRate = recordRTC.sampleRate;
+});</code></pre>
 
     
 </dd>
@@ -779,7 +795,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line408">line 408</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line459">line 459</a>
     </li></ul></dd>
     
 
@@ -803,7 +819,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var dataView = recordRTC.view;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var dataView = recordRTC.view;
+});</code></pre>
 
     
 </dd>
@@ -818,7 +836,7 @@
             
 <dt>
     
-        <h4 class="name" id="getFromDisk"><span class="type-signature">(static) </span>getFromDisk<span class="signature">(type, callback)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id=".getFromDisk"><span class="type-signature">(static) </span>getFromDisk<span class="signature">(type, callback)</span><span class="type-signature"></span></h4>
 
         
     
@@ -940,7 +958,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line432">line 432</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line487">line 487</a>
     </li></ul></dd>
     
 
@@ -967,7 +985,11 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>RecordRTC.getFromDisk('all', function(dataURL, type){    if(type == 'audio') { }    if(type == 'video') { }    if(type == 'gif')   { }});</code></pre>
+    <pre class="prettyprint"><code>RecordRTC.getFromDisk('all', function(dataURL, type){
+    if(type === 'audio') { }
+    if(type === 'video') { }
+    if(type === 'gif')   { }
+});</code></pre>
 
     
 </dd>
@@ -976,7 +998,7 @@
             
 <dt>
     
-        <h4 class="name" id="writeToDisk"><span class="type-signature">(static) </span>writeToDisk<span class="signature">(options)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id=".writeToDisk"><span class="type-signature">(static) </span>writeToDisk<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1075,7 +1097,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line459">line 459</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line516">line 516</a>
     </li></ul></dd>
     
 
@@ -1102,7 +1124,11 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>RecordRTC.writeToDisk({    audio: audioBlob,    video: videoBlob,    gif  : gifBlob});</code></pre>
+    <pre class="prettyprint"><code>RecordRTC.writeToDisk({
+    audio: audioBlob,
+    video: videoBlob,
+    gif  : gifBlob
+});</code></pre>
 
     
 </dd>
@@ -1162,7 +1188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line235">line 235</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line277">line 277</a>
     </li></ul></dd>
     
 
@@ -1189,7 +1215,12 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    var blob = recordRTC.getBlob();    // equivalent to: recordRTC.blob property    var blob = recordRTC.blob;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    var blob = recordRTC.getBlob();
+
+    // equivalent to: recordRTC.blob property
+    var blob = recordRTC.blob;
+});</code></pre>
 
     
 </dd>
@@ -1297,7 +1328,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line253">line 253</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line298">line 298</a>
     </li></ul></dd>
     
 
@@ -1324,7 +1355,11 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    recordRTC.getDataURL(function(dataURL) {        video.src = dataURL;    });});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    recordRTC.getDataURL(function(dataURL) {
+        video.src = dataURL;
+    });
+});</code></pre>
 
     
 </dd>
@@ -1384,7 +1419,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line315">line 315</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line363">line 363</a>
     </li></ul></dd>
     
 
@@ -1411,7 +1446,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.getFromDisk(function(dataURL) {    video.src = dataURL;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.getFromDisk(function(dataURL) {
+    video.src = dataURL;
+});</code></pre>
 
     
 </dd>
@@ -1471,7 +1508,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line280">line 280</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line328">line 328</a>
     </li></ul></dd>
     
 
@@ -1498,7 +1535,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    recordRTC.save('file-name');});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    recordRTC.save('file-name');
+});</code></pre>
 
     
 </dd>
@@ -1606,7 +1645,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line335">line 335</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line386">line 386</a>
     </li></ul></dd>
     
 
@@ -1633,7 +1672,12 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var arrayOfWebPImages = [];arrayOfWebPImages.push({    duration: index,    image: 'data:image/webp;base64,...'});recordRTC.setAdvertisementArray(arrayOfWebPImages);</code></pre>
+    <pre class="prettyprint"><code>var arrayOfWebPImages = [];
+arrayOfWebPImages.push({
+    duration: index,
+    image: 'data:image/webp;base64,...'
+});
+recordRTC.setAdvertisementArray(arrayOfWebPImages);</code></pre>
 
     
 </dd>
@@ -1693,7 +1737,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line205">line 205</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line247">line 247</a>
     </li></ul></dd>
     
 
@@ -1828,7 +1872,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line220">line 220</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -1862,7 +1906,10 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function(videoURL) {    video.src = videoURL;    recordRTC.blob; recordRTC.buffer;});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function(videoURL) {
+    video.src = videoURL;
+    recordRTC.blob; recordRTC.buffer;
+});</code></pre>
 
     
 </dd>
@@ -1922,7 +1969,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line265">line 265</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line310">line 310</a>
     </li></ul></dd>
     
 
@@ -1949,7 +1996,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {    video.src = recordRTC.toURL();});</code></pre>
+    <pre class="prettyprint"><code>recordRTC.stopRecording(function() {
+    video.src = recordRTC.toURL();
+});</code></pre>
 
     
 </dd>

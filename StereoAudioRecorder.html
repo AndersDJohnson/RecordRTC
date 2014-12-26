@@ -87,7 +87,7 @@
 
     
     <div class="description">
-        StereoAudioRecorder is a standalone class used by RecordRTC to bring "stereo" audio-recording in chrome.
+        StereoAudioRecorder is a standalone class used by <a href="RecordRTC.html">RecordRTC</a> to bring "stereo" audio-recording in chrome.
     </div>
     
 
@@ -200,7 +200,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1103">line 1103</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1198">line 1198</a>
     </li></ul></dd>
     
 
@@ -227,7 +227,14 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var recorder = new StereoAudioRecorder(MediaStream, {    sampleRate: 44100,    bufferSize: 4096});recorder.record();recorder.stop(function(blob) {    video.src = URL.createObjectURL(blob);});</code></pre>
+    <pre class="prettyprint"><code>var recorder = new StereoAudioRecorder(MediaStream, {
+    sampleRate: 44100,
+    bufferSize: 4096
+});
+recorder.record();
+recorder.stop(function(blob) {
+    video.src = URL.createObjectURL(blob);
+});</code></pre>
 
     
 </dd>
@@ -251,14 +258,20 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="bufferSize"><span class="type-signature">(static) </span>bufferSize<span class="type-signature"></span></h4>
+    <h4 class="name" id=".bufferSize"><span class="type-signature">(static) </span>bufferSize<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        From the spec: This value controls how frequently the audioprocess event is dispatched and how many sample-frames need to be processed each call. Lower values for buffer size will result in a lower (better) latency. Higher values will be necessary to avoid audio breakup and glitchesThe size of the buffer (in sample-frames) which needs to be processed each time onprocessaudio is called. Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
+        From the spec: This value controls how frequently the audioprocess event is
+dispatched and how many sample-frames need to be processed each call.
+Lower values for buffer size will result in a lower (better) latency.
+Higher values will be necessary to avoid audio breakup and glitches
+The size of the buffer (in sample-frames) which needs to
+be processed each time onprocessaudio is called.
+Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
     </div>
     
 
@@ -346,7 +359,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1338">line 1338</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1449">line 1449</a>
     </li></ul></dd>
     
 
@@ -363,7 +376,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder = new StereoAudioRecorder(mediaStream, {    bufferSize: 4096});</code></pre>
+    <pre class="prettyprint"><code>recorder = new StereoAudioRecorder(mediaStream, {
+    bufferSize: 4096
+});</code></pre>
 
     
 </dd>
@@ -371,14 +386,22 @@
         
             
 <dt>
-    <h4 class="name" id="sampleRate"><span class="type-signature">(static) </span>sampleRate<span class="type-signature"></span></h4>
+    <h4 class="name" id=".sampleRate"><span class="type-signature">(static) </span>sampleRate<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The sample rate (in sample-frames per second) at which the AudioContext handles audio. It is assumed that all AudioNodes in the context run at this rate. In making this assumption, sample-rate converters or "varispeed" processors are not supported in real-time processing.The sampleRate parameter describes the sample-rate of the linear PCM audio data in the buffer in sample-frames per second. An implementation must support sample-rates in at least the range 22050 to 96000.
+        The sample rate (in sample-frames per second) at which the
+AudioContext handles audio. It is assumed that all AudioNodes
+in the context run at this rate. In making this assumption,
+sample-rate converters or "varispeed" processors are not supported
+in real-time processing.
+The sampleRate parameter describes the sample-rate of the
+linear PCM audio data in the buffer in sample-frames per second.
+An implementation must support sample-rates in at least
+the range 22050 to 96000.
     </div>
     
 
@@ -466,7 +489,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1362">line 1362</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1475">line 1475</a>
     </li></ul></dd>
     
 
@@ -483,7 +506,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder = new StereoAudioRecorder(mediaStream, {    sampleRate: 44100});</code></pre>
+    <pre class="prettyprint"><code>recorder = new StereoAudioRecorder(mediaStream, {
+    sampleRate: 44100
+});</code></pre>
 
     
 </dd>
@@ -491,7 +516,7 @@
         
             
 <dt>
-    <h4 class="name" id="this.blob"><span class="type-signature">(static) </span>this.blob<span class="type-signature"></span></h4>
+    <h4 class="name" id=".this.blob"><span class="type-signature">(static) </span>this.blob<span class="type-signature"></span></h4>
 
     
 </dt>
@@ -582,7 +607,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1234">line 1234</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1346">line 1346</a>
     </li></ul></dd>
     
 
@@ -599,7 +624,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function(){    var blob = recorder.blob;});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function(){
+    var blob = recorder.blob;
+});</code></pre>
 
     
 </dd>
@@ -607,7 +634,7 @@
         
             
 <dt>
-    <h4 class="name" id="this.buffer"><span class="type-signature">(static) </span>this.buffer<span class="type-signature"></span></h4>
+    <h4 class="name" id=".this.buffer"><span class="type-signature">(static) </span>this.buffer<span class="type-signature"></span></h4>
 
     
 </dt>
@@ -698,7 +725,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1246">line 1246</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1358">line 1358</a>
     </li></ul></dd>
     
 
@@ -715,7 +742,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function(){    var buffer = recorder.buffer;});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function(){
+    var buffer = recorder.buffer;
+});</code></pre>
 
     
 </dd>
@@ -723,7 +752,7 @@
         
             
 <dt>
-    <h4 class="name" id="this.view"><span class="type-signature">(static) </span>this.view<span class="type-signature"></span></h4>
+    <h4 class="name" id=".this.view"><span class="type-signature">(static) </span>this.view<span class="type-signature"></span></h4>
 
     
 </dt>
@@ -814,7 +843,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1256">line 1256</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1368">line 1368</a>
     </li></ul></dd>
     
 
@@ -831,7 +860,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function(){    var view = recorder.view;});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function(){
+    var view = recorder.view;
+});</code></pre>
 
     
 </dd>
@@ -846,7 +877,7 @@
             
 <dt>
     
-        <h4 class="name" id="this.record"><span class="type-signature">(static) </span>this.record<span class="signature">()</span><span class="type-signature"></span></h4>
+        <h4 class="name" id=".this.record"><span class="type-signature">(static) </span>this.record<span class="signature">()</span><span class="type-signature"></span></h4>
 
         
     
@@ -897,7 +928,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1139">line 1139</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1236">line 1236</a>
     </li></ul></dd>
     
 
@@ -933,7 +964,7 @@
             
 <dt>
     
-        <h4 class="name" id="this.stop"><span class="type-signature">(static) </span>this.stop<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id=".this.stop"><span class="type-signature">(static) </span>this.stop<span class="signature">(callback)</span><span class="type-signature"></span></h4>
 
         
     
@@ -1032,7 +1063,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1157">line 1157</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1254">line 1254</a>
     </li></ul></dd>
     
 
@@ -1059,7 +1090,9 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function(blob) {    video.src = URL.createObjectURL(blob);});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function(blob) {
+    video.src = URL.createObjectURL(blob);
+});</code></pre>
 
     
 </dd>
@@ -1068,7 +1101,7 @@
             
 <dt>
     
-        <h4 class="name" id="%7Bfunction%7D%20onAudioProcessStarted"><span class="type-signature">(static) </span>{function} onAudioProcessStarted<span class="signature">()</span><span class="type-signature"></span></h4>
+        <h4 class="name" id=".%7Bfunction%7DonAudioProcessStarted"><span class="type-signature">(static) </span>{function} onAudioProcessStarted<span class="signature">()</span><span class="type-signature"></span></h4>
 
         
     
@@ -1119,7 +1152,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1393">line 1393</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1516">line 1516</a>
     </li></ul></dd>
     
 
