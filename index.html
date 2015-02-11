@@ -333,7 +333,7 @@ recordRTC.getFromDisk(function(dataURL) {
       width: 320,
       height: 240
    }
-};</code></pre><h2><code>getDataURL</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.getDataURL(function(dataURL) {
+};</code></pre><h2><code>pauseRecording</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.pauseRecording();</code></pre><h2><code>resumeRecording</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.resumeRecording();</code></pre><h2><code>getDataURL</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.getDataURL(function(dataURL) {
    mediaElement.src = dataURL;
 });</code></pre><h2><code>getBlob</code></h2><pre class="prettyprint source lang-javascript"><code>blob = recordRTC.getBlob();</code></pre><h2><code>toURL</code></h2><pre class="prettyprint source lang-javascript"><code>window.open( recordRTC.toURL() );</code></pre><h2><code>save</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.save();</code></pre><h2><code>bufferSize</code></h2><p>Here is how to customize Buffer-Size for audio recording?</p>
 <pre class="prettyprint source lang-javascript"><code>// From the spec: This value controls how frequently the audioprocess event is 
