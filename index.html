@@ -73,7 +73,7 @@
 
 
     <section>
-        <article><h1><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/">WebRTC</a> audio/video recording</h1><p><a href="https://RecordRTC.org/">RecordRTC Documentation</a> / <a href="https://github.com/muaz-khan/RecordRTC/wiki">RecordRTC Wiki Pages</a> / <a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC Demo</a> / <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a></p>
+        <article><h1><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/">WebRTC</a> audio/video recording</h1><p><a href="http://RecordRTC.org/">RecordRTC Documentation</a> / <a href="https://github.com/muaz-khan/RecordRTC/wiki">RecordRTC Wiki Pages</a> / <a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC Demo</a> / <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a></p>
 <p><a href="https://npmjs.org/package/recordrtc"><img src="https://img.shields.io/npm/v/recordrtc.svg" alt="npm"></a> <a href="https://npmjs.org/package/recordrtc"><img src="https://img.shields.io/npm/dm/recordrtc.svg" alt="downloads"></a> <a href="https://travis-ci.org/muaz-khan/RecordRTC"><img src="https://travis-ci.org/muaz-khan/RecordRTC.png?branch=master" alt="Build Status: Linux"></a></p>
 <blockquote>
 <p><a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC</a> is a JavaScript-based media-recording library for modern web-browsers (supporting WebRTC getUserMedia API). It is optimized for different devices and browsers to bring all client-side (pluginfree) recording solutions in single place.</p>
@@ -83,7 +83,6 @@
 <li><a href="http://RecordRTC.org/RecordRTC.html">RecordRTC API Reference</a></li>
 <li><a href="http://RecordRTC.org/MRecordRTC.html">MRecordRTC API Reference</a></li>
 <li><a href="http://RecordRTC.org/MediaStreamRecorder.html">MediaStreamRecorder API Reference</a></li>
-<li><a href="http://RecordRTC.org/StereoRecorder.html">StereoRecorder API Reference</a></li>
 <li><a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder API Reference</a></li>
 <li><a href="http://RecordRTC.org/WhammyRecorder.html">WhammyRecorder API Reference</a></li>
 <li><a href="http://RecordRTC.org/Whammy.html">Whammy API Reference</a></li>
@@ -114,6 +113,10 @@
 <tr>
 <td>Android</td>
 <td><a href="https://play.google.com/store/apps/details?id=com.chrome.beta&amp;hl=en">Chrome</a> / <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox">Firefox</a> / <a href="https://play.google.com/store/apps/details?id=com.opera.browser">Opera</a></td>
+</tr>
+<tr>
+<td>Microsoft Edge</td>
+<td><a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Normal Build</a></td>
 </tr>
 </tbody>
 </table>
@@ -156,13 +159,15 @@
 <li><a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC/PHP-and-FFmpeg">RecordRTC / PHP / FFmpeg</a></li>
 <li><a href="https://www.npmjs.org/package/record-audio">Record Audio and upload to Nodejs server</a></li>
 <li><a href="https://github.com/muaz-khan/ConcatenateBlobs">ConcatenateBlobs.js</a> - Concatenate multiple recordings in single Blob!</li>
+<li><a href="https://www.webrtc-experiment.com/demos/remote-stream-recording.html">Remote stream recording</a></li>
 </ol>
-<h2>How to link?</h2><pre class="prettyprint source"><code>npm install recordrtc</code></pre><p>or using <a href="http://bower.io">Bower</a>:</p>
+<h2>How to link?</h2><pre class="prettyprint source"><code>npm install recordrtc
+
+# you can use with &quot;require&quot; (browserify/nodejs)
+var RecordRTC = require('recordrtc');
+var recorder = RecordRTC(mediaStream, { type: 'audio'});</code></pre><p>or using <a href="http://bower.io">Bower</a>:</p>
 <pre class="prettyprint source"><code>bower install recordrtc</code></pre><p>To use it:</p>
 <pre class="prettyprint source lang-html"><code>&lt;script src=&quot;./node_modules/recordrtc/RecordRTC.js&quot;>&lt;/script>
-
-&lt;!-- or -->
-&lt;script src=&quot;http://RecordRTC.org/latest.js&quot;>&lt;/script>
 
 &lt;!-- or -->
 &lt;script src=&quot;//cdn.WebRTC-Experiment.com/RecordRTC.js&quot;>&lt;/script>
@@ -172,18 +177,37 @@
 <ul>
 <li><a href="https://www.npmjs.org/search?q=RecordRTC">https://www.npmjs.org/search?q=RecordRTC</a></li>
 </ul>
-<h2>Record audio+video in Firefox</h2><p>You'll be recording both audio/video in single WebM container. Though you can edit RecordRTC.js to record in mp4.</p>
-<pre class="prettyprint source lang-javascript"><code>var session = {
-    audio: true,
-    video: true
-};
+<h2>How to capture stream?</h2><pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://cdn.rawgit.com/webrtc/adapter/master/adapter.js&quot;>&lt;/script>
 
-var recordRTC;
+&lt;script>
+function successCallback(stream) {
+    // RecordRTC usage goes here
+}
 
-navigator.getUserMedia(session, function (mediaStream) {
+function errorCallback(errror) {
+    // maybe another application is using the device
+}
+
+var mediaConstraints = { video: true, audio: true };
+
+navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
+&lt;/script></code></pre><h2>Record audio+video in Firefox</h2><p>You'll be recording both audio/video in single WebM container. Though you can edit RecordRTC.js to record in mp4.</p>
+<pre class="prettyprint source lang-javascript"><code>var recordRTC;
+
+function successCallback(stream) {
+    // RecordRTC usage goes here
+
     recordRTC = RecordRTC(MediaStream);
     recordRTC.startRecording();
-}, onError);
+}
+
+function errorCallback(errror) {
+    // maybe another application is using the device
+}
+
+var mediaConstraints = { video: true, audio: true };
+
+navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
 
 btnStopRecording.onclick = function () {
     recordRTC.stopRecording(function (audioVideoWebMURL) {
@@ -200,41 +224,32 @@ recordRTC.stopRecording(function(audioURL) {
 
     var recordedBlob = recordRTC.getBlob();
     recordRTC.getDataURL(function(dataURL) { });
-});</code></pre><p>Remember, you need to invoke <code>navigator.getUserMedia</code> method yourself; it is too easy to use!</p>
-<pre class="prettyprint source lang-javascript"><code>var recordRTC;
+});</code></pre><h2>Echo Issues</h2><p>Simply set <code>volume=0</code> or <code>muted=true</code> over <code>&lt;audio&gt;</code> or <code>&lt;video&gt;</code> element:</p>
+<pre class="prettyprint source lang-javascript"><code>videoElement.muted = true;
+audioElement.muted = true;</code></pre><p>Otherwise, you can pass some media constraints:</p>
+<pre class="prettyprint source lang-javascript"><code>function successCallback(stream) {
+    // RecordRTC usage goes here
+}
 
-navigator.getUserMedia({audio: true}, function(mediaStream) {
-   recordRTC = RecordRTC(MediaStream);
-   recordRTC.startRecording();
-});
+function errorCallback(errror) {
+    // maybe another application is using the device
+}
 
-btnStopRecording.onclick = function() {
-   recordRTC.stopRecording(function(audioURL) {
-        audio.src = audioURL;
-
-        var recordedBlob = recordRTC.getBlob();
-        recordRTC.getDataURL(function(dataURL) { });
-   });
-};</code></pre><p>Also, you don't need to use prefixed versions of <code>getUserMedia</code> and <code>URL</code> objects. RecordRTC auto handles such things for you! Just use non-prefixed version:</p>
-<pre class="prettyprint source lang-javascript"><code>navigator.getUserMedia(media_constraints, onsuccess, onfailure);
-URL.createObjectURL(MediaStream);</code></pre><h2>Echo Issues</h2><p>Simply set <code>volume=0</code> or <code>muted=true</code>:</p>
-<pre class="prettyprint source lang-javascript"><code>navigator.getUserMedia({
+var mediaConstraints = {
     audio: {
         mandatory: {
-            googEchoCancellation: false,
+            echoCancellation: false,
             googAutoGainControl: false,
             googNoiseSuppression: false,
             googHighpassFilter: false
         },
-        optional: []
+        optional: [{
+          googAudioMirroring: false
+        }]
     },
-}, onSuccess, onFailure);
+};
 
-var recordRTC;
-function onSuccess(mediaStream) {
-    recordRTC = RecordRTC(mediaStream);
-    recordRTC.startRecording();
-}</code></pre><ul>
+navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);</code></pre><ul>
 <li><a href="https://chromium.googlesource.com/external/webrtc/+/master/talk/app/webrtc/mediaconstraintsinterface.cc">Constraints Reference</a></li>
 </ul>
 <h2>Record Video</h2><p>Everything is optional except <code>type:'video'</code>:</p>
@@ -294,35 +309,70 @@ recordRTC.stopRecording(function(videoURL) {
     recordRTC.getDataURL(function(dataURL) { });
 });
 &lt;/script></code></pre><p>See a demo: <a href="https://www.webrtc-experiment.com/RecordRTC/Canvas-Recording/">/Canvas-Recording/</a></p>
-<h1>API Reference</h1><h2><code>autoWriteToDisk</code></h2><p>Using <code>autoWriteToDisk</code>; you can suggest RecordRTC to auto-write to indexed-db as soon as you call <code>stopRecording</code> method.</p>
-<pre class="prettyprint source lang-javascript"><code>var recordRTC = RecordRTC(MediaStream, {
-    autoWriteToDisk: true
-});</code></pre><p><code>autoWriteToDisk</code> is helpful for single stream recording and writing to disk; however for <code>MRecordRTC</code>; <code>writeToDisk</code> is preferred one.</p>
-<h2><code>writeToDisk</code></h2><p>You can write recorded blob to disk using <code>writeToDisk</code> method:</p>
-<pre class="prettyprint source lang-javascript"><code>recordRTC.stopRecording();
-recordRTC.writeToDisk();</code></pre><h2><code>getFromDisk</code></h2><p>You can get recorded blob from disk using <code>getFromDisk</code> method:</p>
-<pre class="prettyprint source lang-javascript"><code>// get all blobs from disk
-RecordRTC.getFromDisk('all', function(dataURL, type) {
-   type == 'audio'
-   type == 'video'
-   type == 'gif'
+<h1>API Reference</h1><h2><code>initRecorder</code></h2><p>It is a function that can be used to initiate recorder however skip getting recording outputs. It will provide maximum accuracy in the outputs after using <code>startRecording</code> method. Here is how to use it:</p>
+<pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(mediaStream, {
+  type: 'audio',
+  recorderType: StereoAudioRecorder
 });
 
-// or get just single blob
-RecordRTC.getFromDisk('audio', function(dataURL) {
-   // only audio blob is returned from disk!
-});</code></pre><p>For <a href="https://RecordRTC.org/MRecordRTC.html">MRecordRTC</a>; you can use word <code>MRecordRTC</code> instead of <code>RecordRTC</code>!</p>
-<p>Another possible situation!</p>
-<pre class="prettyprint source lang-javascript"><code>var recordRTC = RecordRTC(mediaStream);
-recordRTC.startRecording();
-recordRTC.stopRecording(function(audioURL) {
-   mediaElement.src = audioURL;
+var videoRecorder = RecordRTC(mediaStream, {
+  type: 'video',
+  recorderType: WhammyRecorder
 });
 
-// &quot;recordRTC&quot; instance object to invoke &quot;getFromDisk&quot; method!
-recordRTC.getFromDisk(function(dataURL) {
-   // audio blob is automaticlaly returned from disk!
-});</code></pre><p>In the above example; you can see that <code>recordRTC</code> instance object is used instead of global <code>RecordRTC</code> object.</p>
+videoRecorder.initRecorder(function() {
+  audioRecorder.initRecorder(function() {
+    // Both recorders are ready to record things accurately
+    videoRecorder.startRecording();
+    audioRecorder.startRecording();
+  });
+});</code></pre><p>After using <code>stopRecording</code>, you'll see that both WAV/WebM blobs are having following charachteristics:</p>
+<ol>
+<li>Both are having same recording duration i.e. size</li>
+<li>Video recorder is having no blank frames</li>
+<li>Audio recorder is having no empty buffers</li>
+</ol>
+<p>This method is really useful to sync audio/video outputs.</p>
+<h2><code>setRecordingDuration</code></h2><p>You can ask RecordRTC to auto stop recording after specific duration. It accepts one mandatory and one optional argument:</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.setRecordingDuration(milliseconds, stoppedCallback);
+
+// the easiest one:
+recordRTC.setRecordingDuration(milliseconds).onRecordingStopped(stoppedCallback);</code></pre><p>Try a simple demo; paste in the chrome console:</p>
+<pre class="prettyprint source lang-javascript"><code>navigator.mediaDevices.getUserMedia({
+    video: true
+}).then(function(stream) {
+    var recordRTC = RecordRTC(stream, {
+        type: 'video',
+        recorderType: WhammyRecorder
+    });
+
+    // auto stop recording after 5 seconds
+    recordRTC.setRecordingDuration(5 * 1000).onRecordingStopped(function(url) {
+        console.debug('setRecordingDuration', url);
+        window.open(url);
+    })
+
+    recordRTC.startRecording();
+}).catch(function(error) {
+    console.error(error);
+});</code></pre><h2><code>clearRecordedData</code></h2><p>This method can be used to clear old recorded frames/buffers. Snippet:</p>
+<pre class="prettyprint source lang-javascript"><code>recorder.clearRecordedData();</code></pre><h2><code>recorderType</code></h2><p>You can force any Recorder by passing this object over RecordRTC constructor:</p>
+<pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(mediaStream, {
+  type: 'audio',
+  recorderType: StereoAudioRecorder
+})</code></pre><p>It means that ALL_BROWSERS will be using <a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder</a> i.e. WebAudio API for audio recording.</p>
+<p>This feature brings remote audio recording support in Firefox, and local audio recording support in Microsoft Edge.</p>
+<p>You can even force <code>WhammyRecorder</code> on Firefox however webp format isn't yet supported in standard Firefox builds. It simply means that, you're skipping MediaRecorder API in Firefox.</p>
+<h2><code>disableLogs</code></h2><p>You can disable all the RecordRTC logs by passing this Boolean:</p>
+<pre class="prettyprint source lang-javascript"><code>var recorder = RecordRTC(mediaStream, {
+  disableLogs: true
+});</code></pre><h2><code>audioChannels</code></h2><p>You can force <a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder</a> to record left-audio-channels only.</p>
+<pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(audioStream, {
+  type: 'audio',
+  recorderType: StereoAudioRecorder,
+  audioChannels: 1 // or leftChannel:true
+});</code></pre><p><em>*It will reduce WAV size to half!</em></p>
+<p>This feature is useful only in Chrome and Microsoft Edge (WAV-recorders).</p>
 <h2>How to set video width/height?</h2><pre class="prettyprint source lang-javascript"><code>var options = {
    type: 'video',
    video: {
@@ -373,10 +423,42 @@ var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sampl
 <p>You can write like this:</p>
 <pre class="prettyprint source lang-javascript"><code>var options = {
    'sample-rate': 16384
-};</code></pre><h1>Clarifications</h1><h2>Is WinXP supported?</h2><p>No WinXP SP2 based &quot;Chrome&quot; support. However, RecordRTC works on WinXP Service Pack 3.</p>
+};</code></pre><h2><code>autoWriteToDisk</code></h2><p>Using <code>autoWriteToDisk</code>; you can suggest RecordRTC to auto-write to indexed-db as soon as you call <code>stopRecording</code> method.</p>
+<pre class="prettyprint source lang-javascript"><code>var recordRTC = RecordRTC(MediaStream, {
+    autoWriteToDisk: true
+});</code></pre><p><code>autoWriteToDisk</code> is helpful for single stream recording and writing to disk; however for <code>MRecordRTC</code>; <code>writeToDisk</code> is preferred one.</p>
+<h2><code>writeToDisk</code></h2><p>You can write recorded blob to disk using <code>writeToDisk</code> method:</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.stopRecording();
+recordRTC.writeToDisk();</code></pre><h2><code>getFromDisk</code></h2><p>You can get recorded blob from disk using <code>getFromDisk</code> method:</p>
+<pre class="prettyprint source lang-javascript"><code>// get all blobs from disk
+RecordRTC.getFromDisk('all', function(dataURL, type) {
+   type == 'audio'
+   type == 'video'
+   type == 'gif'
+});
+
+// or get just single blob
+RecordRTC.getFromDisk('audio', function(dataURL) {
+   // only audio blob is returned from disk!
+});</code></pre><p>For <a href="https://RecordRTC.org/MRecordRTC.html">MRecordRTC</a>; you can use word <code>MRecordRTC</code> instead of <code>RecordRTC</code>!</p>
+<p>Another possible situation!</p>
+<pre class="prettyprint source lang-javascript"><code>var recordRTC = RecordRTC(mediaStream);
+recordRTC.startRecording();
+recordRTC.stopRecording(function(audioURL) {
+   mediaElement.src = audioURL;
+});
+
+// &quot;recordRTC&quot; instance object to invoke &quot;getFromDisk&quot; method!
+recordRTC.getFromDisk(function(dataURL) {
+   // audio blob is automaticlaly returned from disk!
+});</code></pre><p>In the above example; you can see that <code>recordRTC</code> instance object is used instead of global <code>RecordRTC</code> object.</p>
+<h1>Clarifications</h1><h2>Is WinXP supported?</h2><p>No WinXP SP2 based &quot;Chrome&quot; support. However, RecordRTC works on WinXP Service Pack 3.</p>
 <h2>Is Chrome on Android supported?</h2><p>RecordRTC uses WebAudio API for stereo-audio recording. AFAIK, WebAudio is not supported on android chrome releases, yet.</p>
+<p>Firefox merely supports audio-recording on Android devices.</p>
 <h2>Stereo or Mono?</h2><p>Audio recording fails for <code>mono</code> audio. So, try <code>stereo</code> audio only.</p>
-<h2>Possible issues/failures:</h2><p>Do you know &quot;RecordRTC&quot; fails recording audio because following conditions fails:</p>
+<p>MediaRecorder API (in Firefox) seems using mono-audio-recording instead.</p>
+<h2>Possible issues/failures:</h2><p><strong>This section applies only to StereoAudioRecorder:</strong></p>
+<p>Do you know &quot;RecordRTC&quot; fails recording audio because following conditions fails:</p>
 <ol>
 <li>Sample rate and channel configuration must be the same for input and output sides on Windows i.e. audio input/output devices mismatch</li>
 <li>Only the Default microphone device can be used for capturing.</li>
@@ -391,8 +473,6 @@ var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sampl
 </ol>
 <h2>Why stereo?</h2><p>If you explorer chromium code; you'll see that some APIs can only be successfully called for <code>WAV</code> files with <code>stereo</code> audio.</p>
 <p>Stereo audio is only supported for WAV files.</p>
-<p>...still investigating the actual issue of failure with <code>mono</code> audio.</p>
-<p>Media Stream Recording API (MediaRecorder object) is being implemented by both Firefox and Chrome. RecordRTC is also using MediaRecorder API for Firefox (nightly).</p>
 <p>RecordRTC is unable to record &quot;mono&quot; audio on chrome; however it seems that we can covert channels from &quot;stereo&quot; to &quot;mono&quot; using WebAudio API, though. MediaRecorder API's encoder only support 48k/16k mono audio channel (on Firefox Nightly).</p>
 <h2>Credits</h2><ol>
 <li><a href="https://github.com/mattdiamond/Recorderjs">Recorderjs</a> for audio recording</li>
@@ -406,63 +486,11 @@ var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sampl
 <li><a href="https://dvcs.w3.org/hg/dap/raw-file/tip/media-stream-capture/MediaRecorder.html">MediaStream Recording</a></li>
 <li><a href="http://www.w3.org/TR/mediacapture-streams/">Media Capture and Streams</a></li>
 </ol>
-<h2>Contribute in <a href="http://RecordRTC.org">RecordRTC.org</a></h2><p><a href="https://npmjs.org/package/recordrtc.org"><img src="https://img.shields.io/npm/v/recordrtc.org.svg" alt="npm"></a> <a href="https://npmjs.org/package/recordrtc.org"><img src="https://img.shields.io/npm/dm/recordrtc.org.svg" alt="downloads"></a></p>
-<p>http://recordrtc.org/ is a documentation webpage for <a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a>. It is <a href="https://github.com/muaz-khan/RecordRTC/tree/gh-pages">open-sourced in github</a> and everyone can collaborate to improve documentation.</p>
-<p>To contribute:</p>
-<ol>
-<li>You should modify <code>RecordRTC.js</code> file (aka <a href="https://github.com/muaz-khan/RecordRTC/blob/gh-pages/latest.js"><code>latest.js</code></a> file)</li>
-<li>You'll see that each function/property/method is having comments (format is chosen from http://usejsdoc.org/).</li>
-<li>Using <code>jsdoc</code> tool, you can generate documentation HTML pages from <code>latest.js</code> file</li>
-<li>You should NEVER modify HTML pages. You merely need to modify <code>latest.js</code> file for documentation.</li>
-</ol>
-<p>Steps to contribute:</p>
-<ol>
-<li>Modify <code>latest.js</code> file</li>
-<li>Use below NPM-commands to generate HTML pages.</li>
-<li>Manually copy/paste <code>latest.js</code> file in the resulting <code>recordrtc.org</code> directory</li>
-<li>Copy <code>recordrtc.org</code> directory and replace in <code>RecordRTC</code> github clone's <code>gh-pages</code> section</li>
-<li>Send a pull-request and done!</li>
-</ol>
-<pre class="prettyprint source"><code># First step: install recordrtc.org template and javascript file
-npm install recordrtc.org
-
-# Second step: generate HTML files from template & latest.js file
-cd .\node_modules\recordrtc.org
-
-# This command generates HTML pages from latest.js file
-node_modules\.bin\jsdoc node_modules\recordrtc\RecordRTC.js -d .\..\..\recordrtc.org node_modules\recordrtc\README.md -t template</code></pre><p>Now you'll see a directory with name <code>recordrtc.org</code>.</p>
-<pre class="prettyprint source"><code># This command runs index.html file
-# You can use it to preview HTML pages (doc files)
-.\..\..\recordrtc.org\index.html</code></pre><h2>Send pull requests</h2><p>Now, you should fork this repository:</p>
+<h2>Contribute in <a href="http://RecordRTC.org">RecordRTC.org</a> domain</h2><p>The domain www.RecordRTC.org is open-sourced here:</p>
 <ul>
-<li><a href="https://github.com/muaz-khan/RecordRTC">https://github.com/muaz-khan/RecordRTC</a></li>
+<li>https://github.com/muaz-khan/RecordRTC/tree/gh-pages</li>
 </ul>
-<p>And push/pull <code>recordrtc.org</code> directory to <code>gh-pages</code>.</p>
-<h2>How to modify <code>latest.js</code> file?</h2><p>RecordRTC is using comments format from jsdoc:</p>
-<ul>
-<li><a href="http://usejsdoc.org/">http://usejsdoc.org/</a></li>
-</ul>
-<p>E.g.</p>
-<pre class="prettyprint source lang-javascript"><code>/**
-* Description
-* @summary Summary
-* @typedef Hello
-* @example
-* var some = new Something();
-*/</code></pre><p>Example - <a href="https://github.com/muaz-khan/RecordRTC/blob/gh-pages/latest.js#L206"><code>stopRecording</code></a> method:</p>
-<pre class="prettyprint source lang-javascript"><code>/**
- * This method stops recording. It takes single &quot;callback&quot; argument. It is suggested to get blob or URI in the callback to make sure all encoders finished their jobs.
- * @param {function} callback - This callback function is invoked after completion of all encoding jobs.
- * @method
- * @memberof RecordRTC
- * @instance
- * @example
- * recordRTC.stopRecording(function(videoURL) {
- *     video.src = videoURL;
- * });
- * @todo Implement &lt;code class=&quot;str&quot;>recordRTC.stopRecording().getDataURL(callback);&lt;/code>
- */
-stopRecording: stopRecording,</code></pre><h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="https://plus.google.com/+MuazKhan">Muaz Khan</a>.</p></article>
+<h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="http://www.MuazKhan.com">Muaz Khan</a>.</p></article>
     </section>
 
 
@@ -473,7 +501,7 @@ stopRecording: stopRecording,</code></pre><h2>License</h2><p><a href="https://gi
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="StereoRecorder.html">StereoRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#mergeProps">mergeProps</a></li><li><a href="global.html#reformatProps">reformatProps</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
 </nav>
 
 <br clear="both">
