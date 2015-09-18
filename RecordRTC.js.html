@@ -56,7 +56,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// Last time updated at September 03, 2015, 08:32:23
+            <pre class="prettyprint source linenums"><code>// Last time updated at September 18, 2015
 
 // links:
 // Open-Sourced: https://github.com/muaz-khan/RecordRTC
@@ -67,23 +67,26 @@
 
 // updates?
 /*
+-. GifRecorder.js can now record HTMLCanvasElement|CanvasRenderingContext2D as well.
+-. added: frameInterval:20 for WhammyRecorder.js
+-. chrome issue  audio plus 720p-video recording can be fixed by setting bufferSize:16384
+-. fixed Firefox save-as dialog i.e. recordRTC.save('filen-name')
+-. "indexedDB" bug fixed for Firefox.
+-. numberOfAudioChannels:1 can be passed to reduce WAV size in Chrome.
 -. StereoRecorder.js is removed. It was redundant. Now RecordRTC is directly using: StereoAudioRecorder.js
 -. mergeProps is removed. It was redundant.
 -. reformatProps is removed. Now plz pass exact frameRate/sampleRate instead of frame-rate/sample-rate
 -. Firefox supports remote-audio-recording since v28 - RecordRTC(remoteStream, { recorderType: StereoAudioRecorder });
 -. added 3 methods: initRecorder, setRecordingDuration and clearRecordedData
 -. Microsoft Edge support added (only-audio-yet).
--. bowserify/nodejs support added.
--. Fixed echo.
--. CanvasRecorder fixed.
 -. You can pass "recorderType" - RecordRTC(stream, { recorderType: StereoAudioRecorder });
 -. If MediaStream is suddenly stopped in Firefox.
 -. Added "disableLogs"         - RecordRTC(stream, { disableLogs: true });
 -. You can pass "bufferSize:0" - RecordRTC(stream, { bufferSize: 0 });
 -. You can set "leftChannel"   - RecordRTC(stream, { leftChannel: true });
--. Fixed MRecordRTC.
 -. Added functionality for analyse black frames and cut them - pull#293
 -. if you're recording GIF, you must link: https://cdn.webrtc-experiment.com/gif-recorder.js
+-. You can set "frameInterval" for video - RecordRTC(stream, { type: 'video', frameInterval: 100 });
 */
 
 //------------------------------------
@@ -136,6 +139,8 @@
  * var recordRTC = new RecordRTC(mediaStream[, config]);
  * @see For further information:
  * @see {@link https://github.com/muaz-khan/RecordRTC|RecordRTC Source Code}
+ * @param {MediaStream} mediaStream - MediaStream object fetched using getUserMedia API or generated using captureStreamUntilEnded or WebAudio API.
+ * @param {object} config - {type:"video", disableLogs: true, numberOfAudioChannels: 1, bufferSize: 0, sampleRate: 0, video: HTMLVideoElement, etc.}
  */
 
 function RecordRTC(mediaStream, config) {
@@ -143,6 +148,26 @@ function RecordRTC(mediaStream, config) {
 
     if (!mediaStream) {
         throw 'MediaStream is mandatory.';
+    }
+
+    if (config.recorderType &amp;&amp; !config.type) {
+        if (config.recorderType === WhammyRecorder || config.recorderType === CanvasRecorder) {
+            config.type = 'video';
+        } else if (config.recorderType === GifRecorder) {
+            config.type = 'gif';
+        } else if (config.recorderType === StereoAudioRecorder) {
+            config.type = 'audio';
+        } else if (config.recorderType === MediaStreamRecorder) {
+            if (mediaStream.getAudioTracks().length &amp;&amp; mediaStream.getVideoTracks().length) {
+                config.type = 'video';
+            } else if (mediaStream.getAudioTracks().length &amp;&amp; !mediaStream.getVideoTracks().length) {
+                config.type = 'audio';
+            } else if (!mediaStream.getAudioTracks().length &amp;&amp; mediaStream.getVideoTracks().length) {
+                config.type = 'audio';
+            } else {
+                // config.type = 'UnKnown';
+            }
+        }
     }
 
     // consider default type=audio
@@ -163,18 +188,14 @@ function RecordRTC(mediaStream, config) {
             mediaRecorder.resume();
 
             if (self.recordingDuration) {
-                setTimeout(function() {
-                    stopRecording(self.onRecordingStopped);
-                }, self.recordingDuration);
+                handleRecordingDuration();
             }
             return self;
         }
 
         initRecorder(function() {
             if (self.recordingDuration) {
-                setTimeout(function() {
-                    stopRecording(self.onRecordingStopped);
-                }, self.recordingDuration);
+                handleRecordingDuration();
             }
         });
 
@@ -190,18 +211,18 @@ function RecordRTC(mediaStream, config) {
 
         // StereoAudioRecorder can work with all three: Edge, Firefox and Chrome
         // todo: detect if it is Edge, then auto use: StereoAudioRecorder
-        if (typeof StereoAudioRecorder !== 'undefined' &amp;&amp; isChrome) {
+        if (typeof StereoAudioRecorder !== 'undefined' &amp;&amp; (isChrome || isEdge || isOpera)) {
             // Media Stream Recording API has not been implemented in chrome yet;
             // That's why using WebAudio API to record stereo audio in WAV format
             Recorder = StereoAudioRecorder;
         }
 
-        if (typeof MediaStreamRecorder !== 'undefined' &amp;&amp; !isChrome) {
+        if (typeof MediaStreamRecorder !== 'undefined' &amp;&amp; typeof MediaRecorder !== 'undefined' &amp;&amp; 'requestData' in MediaRecorder.prototype) {
             Recorder = MediaStreamRecorder;
         }
 
         // video recorder (in WebM format)
-        if (config.type === 'video' &amp;&amp; isChrome) {
+        if (config.type === 'video' &amp;&amp; (isChrome || isOpera)) {
             if (typeof WhammyRecorder !== 'undefined') {
                 Recorder = WhammyRecorder;
             } else {
@@ -367,6 +388,12 @@ function RecordRTC(mediaStream, config) {
             URL.revokeObjectURL(blob);
             return worker;
         }
+    }
+
+    function handleRecordingDuration() {
+        setTimeout(function() {
+            stopRecording(self.onRecordingStopped);
+        }, self.recordingDuration);
     }
 
     var WARNING = 'It seems that "startRecording" is not invoked for ' + config.type + ' recorder.';
@@ -537,35 +564,10 @@ function RecordRTC(mediaStream, config) {
          */
         save: function(fileName) {
             if (!mediaRecorder) {
-                var that = this;
-                setTimeout(function() {
-                    that.save(fileName);
-                }, 2000);
                 return console.warn(WARNING);
             }
 
-            var fileFullName = (fileName || (Math.round(Math.random() * 9999999999) + 888888888)) + '.' + mediaRecorder.blob.type.split('/')[1];
-
-            if (typeof navigator.msSaveOrOpenBlob !== 'undefined') {
-                return navigator.msSaveOrOpenBlob(mediaRecorder.blob, fileFullName);
-            } else if (typeof navigator.msSaveBlob !== 'undefined') {
-                return navigator.msSaveBlob(mediaRecorder.blob, fileFullName);
-            }
-
-            var hyperlink = document.createElement('a');
-            hyperlink.href = URL.createObjectURL(mediaRecorder.blob);
-            hyperlink.target = '_blank';
-            hyperlink.download = fileFullName;
-
-            var evt = new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            });
-
-            hyperlink.dispatchEvent(evt);
-
-            URL.revokeObjectURL(hyperlink.href);
+            invokeSaveAsDialog(mediaRecorder.blob, fileName);
         },
 
         /**
@@ -800,6 +802,12 @@ RecordRTC.writeToDisk = function(options) {
 if (typeof module !== 'undefined' /* &amp;&amp; !!module.exports*/ ) {
     module.exports = RecordRTC;
 }
+
+if (typeof define === 'function' &amp;&amp; define.amd) {
+    define('RecordRTC', [], function() {
+        return RecordRTC;
+    });
+}
 // _____________
 // MRecordRTC.js
 
@@ -942,6 +950,9 @@ function MRecordRTC(mediaStream) {
      *     var videoBlob = recording.video;
      *     var gifBlob   = recording.gif;
      * });
+     * // or
+     * var audioBlob = recorder.getBlob().audio;
+     * var videoBlob = recorder.getBlob().video;
      */
     this.getBlob = function(callback) {
         var output = {};
@@ -961,6 +972,8 @@ function MRecordRTC(mediaStream) {
         if (callback) {
             callback(output);
         }
+
+        return output;
     };
 
     /**
@@ -1149,7 +1162,9 @@ if (typeof URL === 'undefined' &amp;&amp; typeof webkitURL !== 'undefined') {
     var URL = webkitURL;
 }
 
-var isChrome = true;
+var isEdge = navigator.userAgent.indexOf('Edge') !== -1 &amp;&amp; (!!navigator.msSaveBlob || !!navigator.msSaveOrOpenBlob);
+var isOpera = !!window.opera || navigator.userAgent.indexOf('OPR/') !== -1;
+var isChrome = !isOpera &amp;&amp; !isEdge &amp;&amp; !!navigator.webkitGetUserMedia;
 
 if (typeof navigator !== 'undefined') {
     if (typeof navigator.webkitGetUserMedia !== 'undefined') {
@@ -1159,8 +1174,6 @@ if (typeof navigator !== 'undefined') {
     if (typeof navigator.mozGetUserMedia !== 'undefined') {
         navigator.getUserMedia = navigator.mozGetUserMedia;
     }
-
-    isChrome = typeof navigator.webkitGetUserMedia !== 'undefined';
 } else {
     /*global navigator:true */
     var navigator = {
@@ -1193,6 +1206,56 @@ function bytesToSize(bytes) {
     }
     var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
     return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+}
+
+function invokeSaveAsDialog(file, fileName) {
+    if (!file) {
+        throw 'Blob object is required.';
+    }
+
+    if (!file.type) {
+        file.type = 'video/webm';
+    }
+
+    var fileExtension = file.type.split('/')[1];
+
+    if (fileName &amp;&amp; fileName.indexOf('.') !== -1) {
+        var splitted = fileName.split('.');
+        fileName = splitted[0];
+        fileExtension = splitted[1];
+    }
+
+    var fileFullName = (fileName || (Math.round(Math.random() * 9999999999) + 888888888)) + '.' + fileExtension;
+
+    if (typeof navigator.msSaveOrOpenBlob !== 'undefined') {
+        return navigator.msSaveOrOpenBlob(file, fileFullName);
+    } else if (typeof navigator.msSaveBlob !== 'undefined') {
+        return navigator.msSaveBlob(file, fileFullName);
+    }
+
+    var hyperlink = document.createElement('a');
+    hyperlink.href = URL.createObjectURL(file);
+    hyperlink.target = '_blank';
+    hyperlink.download = fileFullName;
+
+    if (!!navigator.mozGetUserMedia) {
+        hyperlink.onclick = function() {
+            (document.body || document.documentElement).removeChild(hyperlink);
+        };
+        (document.body || document.documentElement).appendChild(hyperlink);
+    }
+
+    var evt = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+    });
+
+    hyperlink.dispatchEvent(evt);
+
+    if (!navigator.mozGetUserMedia) {
+        URL.revokeObjectURL(hyperlink.href);
+    }
 }
 // __________ (used to handle stuff like http://goo.gl/xmE5eg) issue #129
 // Storage.js
@@ -1244,6 +1307,7 @@ if (typeof AudioContext !== 'undefined') {
  *     var blob = recorder.blob;
  * });
  * @param {MediaStream} mediaStream - MediaStream object fetched using getUserMedia API or generated using captureStreamUntilEnded or WebAudio API.
+ * @param {object} config - {disableLogs:true, initCallback: function, mimeType: "video/webm", onAudioProcessStarted: function}
  */
 
 function MediaStreamRecorder(mediaStream, config) {
@@ -1470,10 +1534,8 @@ function MediaStreamRecorder(mediaStream, config) {
  *     video.src = URL.createObjectURL(blob);
  * });
  * @param {MediaStream} mediaStream - MediaStream object fetched using getUserMedia API or generated using captureStreamUntilEnded or WebAudio API.
- * @param {object} config - {sampleRate: 44100, bufferSize: 4096}
+ * @param {object} config - {sampleRate: 44100, bufferSize: 4096, numberOfAudioChannels: 1, etc.}
  */
-
-var __stereoAudioRecorderJavacriptNode;
 
 function StereoAudioRecorder(mediaStream, config) {
     if (!mediaStream.getAudioTracks().length) {
@@ -1489,6 +1551,7 @@ function StereoAudioRecorder(mediaStream, config) {
     var rightchannel = [];
     var recording = false;
     var recordingLength = 0;
+    var jsAudioNode;
 
     var numberOfAudioChannels = 2;
 
@@ -1503,60 +1566,6 @@ function StereoAudioRecorder(mediaStream, config) {
 
     if (!config.disableLogs) {
         console.debug('StereoAudioRecorder is set to record number of channels: ', numberOfAudioChannels);
-    }
-
-    var legalBufferValues = [0, 256, 512, 1024, 2048, 4096, 8192, 16384];
-
-    /**
-     * From the spec: This value controls how frequently the audioprocess event is
-     * dispatched and how many sample-frames need to be processed each call.
-     * Lower values for buffer size will result in a lower (better) latency.
-     * Higher values will be necessary to avoid audio breakup and glitches
-     * The size of the buffer (in sample-frames) which needs to
-     * be processed each time onprocessaudio is called.
-     * Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
-     * @property {number} bufferSize - Buffer-size for how frequently the audioprocess event is dispatched.
-     * @memberof StereoAudioRecorder
-     * @example
-     * recorder = new StereoAudioRecorder(mediaStream, {
-     *     bufferSize: 4096
-     * });
-     */
-
-    // "0" means, let chrome decide the most accurate buffer-size for current platform.
-    var bufferSize = typeof config.bufferSize === 'undefined' ? 4096 : config.bufferSize;
-
-    if (legalBufferValues.indexOf(bufferSize) === -1) {
-        if (!config.disableLogs) {
-            console.warn('Legal values for buffer-size are ' + JSON.stringify(legalBufferValues, null, '\t'));
-        }
-    }
-
-
-    /**
-     * The sample rate (in sample-frames per second) at which the
-     * AudioContext handles audio. It is assumed that all AudioNodes
-     * in the context run at this rate. In making this assumption,
-     * sample-rate converters or "varispeed" processors are not supported
-     * in real-time processing.
-     * The sampleRate parameter describes the sample-rate of the
-     * linear PCM audio data in the buffer in sample-frames per second.
-     * An implementation must support sample-rates in at least
-     * the range 22050 to 96000.
-     * @property {number} sampleRate - Buffer-size for how frequently the audioprocess event is dispatched.
-     * @memberof StereoAudioRecorder
-     * @example
-     * recorder = new StereoAudioRecorder(mediaStream, {
-     *     sampleRate: 44100
-     * });
-     */
-    var sampleRate = typeof config.sampleRate !== 'undefined' ? config.sampleRate : context.sampleRate || 44100;
-
-    if (sampleRate &lt; 22050 || sampleRate > 96000) {
-        // Ref: http://stackoverflow.com/a/26303918/552182
-        if (!config.disableLogs) {
-            console.warn('sample-rate must be under range 22050 and 96000.');
-        }
     }
 
     /**
@@ -1725,20 +1734,23 @@ function StereoAudioRecorder(mediaStream, config) {
 
         webWorker.onmessage = function(event) {
             callback(event.data.buffer, event.data.view);
+
+            // release memory
+            URL.revokeObjectURL(webWorker.workerURL);
         };
 
         webWorker.postMessage(config);
     }
 
     function processInWebWorker(_function) {
-        var blob = URL.createObjectURL(new Blob([_function.toString(),
-            'this.onmessage =  function (e) {' + _function.name + '(e.data);}'
+        var workerURL = URL.createObjectURL(new Blob([_function.toString(),
+            ';this.onmessage =  function (e) {' + _function.name + '(e.data);}'
         ], {
             type: 'application/javascript'
         }));
 
-        var worker = new Worker(blob);
-        URL.revokeObjectURL(blob);
+        var worker = new Worker(workerURL);
+        worker.workerURL = workerURL;
         return worker;
     }
 
@@ -1757,7 +1769,7 @@ function StereoAudioRecorder(mediaStream, config) {
         recording = false;
 
         // to make sure onaudioprocess stops firing
-        audioInput.disconnect();
+        // audioInput.disconnect();
 
         mergeLeftRightBuffers({
             sampleRate: sampleRate,
@@ -1821,18 +1833,73 @@ function StereoAudioRecorder(mediaStream, config) {
     // creates an audio node from the microphone incoming stream
     var audioInput = context.createMediaStreamSource(mediaStream);
 
+    var legalBufferValues = [0, 256, 512, 1024, 2048, 4096, 8192, 16384];
+
+    /**
+     * From the spec: This value controls how frequently the audioprocess event is
+     * dispatched and how many sample-frames need to be processed each call.
+     * Lower values for buffer size will result in a lower (better) latency.
+     * Higher values will be necessary to avoid audio breakup and glitches
+     * The size of the buffer (in sample-frames) which needs to
+     * be processed each time onprocessaudio is called.
+     * Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
+     * @property {number} bufferSize - Buffer-size for how frequently the audioprocess event is dispatched.
+     * @memberof StereoAudioRecorder
+     * @example
+     * recorder = new StereoAudioRecorder(mediaStream, {
+     *     bufferSize: 4096
+     * });
+     */
+
+    // "0" means, let chrome decide the most accurate buffer-size for current platform.
+    var bufferSize = typeof config.bufferSize === 'undefined' ? 4096 : config.bufferSize;
+
+    if (legalBufferValues.indexOf(bufferSize) === -1) {
+        if (!config.disableLogs) {
+            console.warn('Legal values for buffer-size are ' + JSON.stringify(legalBufferValues, null, '\t'));
+        }
+    }
+
     if (context.createJavaScriptNode) {
-        __stereoAudioRecorderJavacriptNode = context.createJavaScriptNode(bufferSize, numberOfAudioChannels, numberOfAudioChannels);
+        jsAudioNode = context.createJavaScriptNode(bufferSize, numberOfAudioChannels, numberOfAudioChannels);
     } else if (context.createScriptProcessor) {
-        __stereoAudioRecorderJavacriptNode = context.createScriptProcessor(bufferSize, numberOfAudioChannels, numberOfAudioChannels);
+        jsAudioNode = context.createScriptProcessor(bufferSize, numberOfAudioChannels, numberOfAudioChannels);
     } else {
         throw 'WebAudio API has no support on this browser.';
     }
 
     // connect the stream to the gain node
-    audioInput.connect(__stereoAudioRecorderJavacriptNode);
+    audioInput.connect(jsAudioNode);
 
-    bufferSize = __stereoAudioRecorderJavacriptNode.bufferSize;
+    if (!config.bufferSize) {
+        bufferSize = jsAudioNode.bufferSize; // device buffer-size
+    }
+
+    /**
+     * The sample rate (in sample-frames per second) at which the
+     * AudioContext handles audio. It is assumed that all AudioNodes
+     * in the context run at this rate. In making this assumption,
+     * sample-rate converters or "varispeed" processors are not supported
+     * in real-time processing.
+     * The sampleRate parameter describes the sample-rate of the
+     * linear PCM audio data in the buffer in sample-frames per second.
+     * An implementation must support sample-rates in at least
+     * the range 22050 to 96000.
+     * @property {number} sampleRate - Buffer-size for how frequently the audioprocess event is dispatched.
+     * @memberof StereoAudioRecorder
+     * @example
+     * recorder = new StereoAudioRecorder(mediaStream, {
+     *     sampleRate: 44100
+     * });
+     */
+    var sampleRate = typeof config.sampleRate !== 'undefined' ? config.sampleRate : context.sampleRate || 44100;
+
+    if (sampleRate &lt; 22050 || sampleRate > 96000) {
+        // Ref: http://stackoverflow.com/a/26303918/552182
+        if (!config.disableLogs) {
+            console.warn('sample-rate must be under range 22050 and 96000.');
+        }
+    }
 
     if (!config.disableLogs) {
         console.log('sample-rate', sampleRate);
@@ -1890,7 +1957,7 @@ function StereoAudioRecorder(mediaStream, config) {
 
     var isAudioProcessStarted = false;
 
-    __stereoAudioRecorderJavacriptNode.onaudioprocess = function(e) {
+    function onAudioProcessDataAvailable(e) {
         if (isPaused) {
             return;
         }
@@ -1898,12 +1965,12 @@ function StereoAudioRecorder(mediaStream, config) {
         // if MediaStream().stop() or MediaStreamTrack.stop() is invoked.
         if ('active' in mediaStream) {
             if (!mediaStream.active) {
-                __stereoAudioRecorderJavacriptNode.onaudioprocess = function() {};
+                jsAudioNode.onaudioprocess = function() {};
                 recording = false;
             }
         } else if ('ended' in mediaStream) { // old hack
             if (mediaStream.ended) {
-                __stereoAudioRecorderJavacriptNode.onaudioprocess = function() {};
+                jsAudioNode.onaudioprocess = function() {};
                 recording = false;
             }
         }
@@ -1933,7 +2000,6 @@ function StereoAudioRecorder(mediaStream, config) {
 
         var left = e.inputBuffer.getChannelData(0);
 
-
         // we clone the samples
         leftchannel.push(new Float32Array(left));
 
@@ -1943,10 +2009,12 @@ function StereoAudioRecorder(mediaStream, config) {
         }
 
         recordingLength += bufferSize;
-    };
+    }
+
+    jsAudioNode.onaudioprocess = onAudioProcessDataAvailable;
 
     // to prevent self audio to be connected with speakers
-    __stereoAudioRecorderJavacriptNode.connect(context.destination);
+    jsAudioNode.connect(context.destination);
 }
 // _________________
 // CanvasRecorder.js
@@ -1957,12 +2025,13 @@ function StereoAudioRecorder(mediaStream, config) {
  * @typedef CanvasRecorder
  * @class
  * @example
- * var recorder = new CanvasRecorder(htmlElement);
+ * var recorder = new CanvasRecorder(htmlElement, { disableLogs: true });
  * recorder.record();
  * recorder.stop(function(blob) {
  *     video.src = URL.createObjectURL(blob);
  * });
  * @param {HTMLElement} htmlElement - querySelector/getElementById/getElementsByTagName[0]/etc.
+ * @param {object} config - {disableLogs:true, initCallback: function}
  */
 
 function CanvasRecorder(htmlElement, config) {
@@ -2102,7 +2171,7 @@ function CanvasRecorder(htmlElement, config) {
                 });
 
                 if (isRecording) {
-                    requestAnimationFrame(drawCanvasFrame);
+                    setTimeout(drawCanvasFrame, 0);
                 }
             }
         });
@@ -2127,11 +2196,20 @@ function CanvasRecorder(htmlElement, config) {
  *     video.src = URL.createObjectURL(blob);
  * });
  * @param {MediaStream} mediaStream - MediaStream object fetched using getUserMedia API or generated using captureStreamUntilEnded or WebAudio API.
+ * @param {object} config - {disableLogs: true, initCallback: function, video: HTMLVideoElement, etc.}
  */
 
 function WhammyRecorder(mediaStream, config) {
 
     config = config || {};
+
+    if (!config.frameInterval) {
+        config.frameInterval = 10;
+    }
+
+    if (!config.disableLogs) {
+        console.log('Using frames-interval:', config.frameInterval);
+    }
 
     /**
      * This method records video.
@@ -2205,13 +2283,19 @@ function WhammyRecorder(mediaStream, config) {
             console.log('video width/height', video.width || canvas.width, '*', video.height || canvas.height);
         }
 
-        drawFrames();
+        drawFrames(config.frameInterval);
     };
 
-    function drawFrames() {
+    /**
+     * Draw and push frames to Whammy
+     * @param {integer} frameInterval - set minimum interval (in milliseconds) between each time we push a frame to Whammy
+     */
+    function drawFrames(frameInterval) {
+        frameInterval = typeof frameInterval !== 'undefined' ? frameInterval : 10;
+
         var duration = new Date().getTime() - lastTime;
         if (!duration) {
-            return setTimeout(drawFrames, 10);
+            return setTimeout(drawFrames, frameInterval, frameInterval);
         }
 
         if (isPausedRecording) {
@@ -2235,7 +2319,7 @@ function WhammyRecorder(mediaStream, config) {
         });
 
         if (!isStopDrawing) {
-            setTimeout(drawFrames, 10);
+            setTimeout(drawFrames, frameInterval, frameInterval);
         }
     }
 
@@ -2453,7 +2537,7 @@ var Whammy = (function() {
     function WhammyVideo(duration) {
         this.frames = [];
         this.duration = duration || 1;
-        this.quality = 100;
+        this.quality = 0.8;
     }
 
     /**
@@ -2897,8 +2981,9 @@ var DiskStorage = {
     init: function() {
         var self = this;
 
-        if (typeof 'indexedDB' === 'undefined') {
-            var indexedDB = {}; // todo?
+        if (typeof indexedDB === 'undefined' || typeof indexedDB.open === 'undefined') {
+            console.error('IndexedDB API are not available in this browser.');
+            return;
         }
 
         if (typeof webkitIndexedDB !== 'undefined') {
@@ -3045,16 +3130,17 @@ var DiskStorage = {
 // GifRecorder.js
 
 /**
- * GifRecorder is standalone calss used by {@link RecordRTC} to record video as animated gif image.
+ * GifRecorder is standalone calss used by {@link RecordRTC} to record video or canvas into animated gif.
  * @typedef GifRecorder
  * @class
  * @example
- * var recorder = new GifRecorder(mediaStream);
+ * var recorder = new GifRecorder(mediaStream || canvas || context, { width: 1280, height: 720, frameRate: 200, quality: 10 });
  * recorder.record();
  * recorder.stop(function(blob) {
  *     img.src = URL.createObjectURL(blob);
  * });
- * @param {MediaStream} mediaStream - MediaStream object fetched using getUserMedia API or generated using captureStreamUntilEnded or WebAudio API.
+ * @param {MediaStream} mediaStream - MediaStream object or HTMLCanvasElement or CanvasRenderingContext2D.
+ * @param {object} config - {disableLogs:true, initCallback: function, width: 320, height: 240, frameRate: 200, quality: 10}
  */
 
 function GifRecorder(mediaStream, config) {
@@ -3064,6 +3150,8 @@ function GifRecorder(mediaStream, config) {
 
     config = config || {};
 
+    var isHTMLObject = mediaStream instanceof CanvasRenderingContext2D || mediaStream instanceof HTMLCanvasElement;
+
     /**
      * This method records MediaStream.
      * @method
@@ -3072,33 +3160,35 @@ function GifRecorder(mediaStream, config) {
      * recorder.record();
      */
     this.record = function() {
-        if (!config.width) {
-            config.width = video.offsetWidth || 320;
+        if (!isHTMLObject) {
+            if (!config.width) {
+                config.width = video.offsetWidth || 320;
+            }
+
+            if (!this.height) {
+                config.height = video.offsetHeight || 240;
+            }
+
+            if (!config.video) {
+                config.video = {
+                    width: config.width,
+                    height: config.height
+                };
+            }
+
+            if (!config.canvas) {
+                config.canvas = {
+                    width: config.width,
+                    height: config.height
+                };
+            }
+
+            canvas.width = config.canvas.width;
+            canvas.height = config.canvas.height;
+
+            video.width = config.video.width;
+            video.height = config.video.height;
         }
-
-        if (!this.height) {
-            config.height = video.offsetHeight || 240;
-        }
-
-        if (!config.video) {
-            config.video = {
-                width: config.width,
-                height: config.height
-            };
-        }
-
-        if (!config.canvas) {
-            config.canvas = {
-                width: config.width,
-                height: config.height
-            };
-        }
-
-        canvas.width = config.canvas.width;
-        canvas.height = config.canvas.height;
-
-        video.width = config.video.width;
-        video.height = config.video.height;
 
         // external library to record as GIF images
         gifEncoder = new GIFEncoder();
@@ -3149,7 +3239,7 @@ function GifRecorder(mediaStream, config) {
                 return;
             }
 
-            if (video.paused) {
+            if (!isHTMLObject &amp;&amp; video.paused) {
                 // via: https://github.com/muaz-khan/WebRTC-Experiment/pull/316
                 // Tweak for Android Chrome
                 video.play();
@@ -3261,17 +3351,27 @@ function GifRecorder(mediaStream, config) {
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
 
-    var video = document.createElement('video');
-    video.muted = true;
-    video.autoplay = true;
-
-    if (typeof video.srcObject !== 'undefined') {
-        video.srcObject = mediaStream;
-    } else {
-        video.src = URL.createObjectURL(mediaStream);
+    if (isHTMLObject) {
+        if (mediaStream instanceof CanvasRenderingContext2D) {
+            context = mediaStream;
+        } else if (mediaStream instanceof HTMLCanvasElement) {
+            context = mediaStream.getContext('2d');
+        }
     }
 
-    video.play();
+    if (!isHTMLObject) {
+        var video = document.createElement('video');
+        video.muted = true;
+        video.autoplay = true;
+
+        if (typeof video.srcObject !== 'undefined') {
+            video.srcObject = mediaStream;
+        } else {
+            video.src = URL.createObjectURL(mediaStream);
+        }
+
+        video.play();
+    }
 
     var lastAnimationFrame = null;
     var startTime, endTime, lastFrameTime;

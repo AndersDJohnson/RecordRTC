@@ -58,7 +58,11 @@
 
 <article>
     <header style="text-align: center;">
-        <h1>Class: CanvasRecorder</h1>            
+        <h1>
+            <a href="https://github.com/muaz-khan/RecordRTC/tree/master/dev">
+                Class: CanvasRecorder
+            </a>
+        </h1>            
         <p>
             <span> &copy; </span>
             <a href="http://www.MuazKhan.com/">Muaz Khan</a>
@@ -76,7 +80,7 @@
         
 <dt>
     
-        <h4 class="name" id="CanvasRecorder"><span class="type-signature"></span>new CanvasRecorder<span class="signature">(htmlElement)</span><span class="type-signature"></span></h4>
+        <h4 class="name" id="CanvasRecorder"><span class="type-signature"></span>new CanvasRecorder<span class="signature">(htmlElement, config)</span><span class="type-signature"></span></h4>
 
         
         <p class="summary">HTML2Canvas recording into video WebM.</p>
@@ -143,6 +147,29 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">{disableLogs:true, initCallback: function}</td>
+        </tr>
+
+    
     </tbody>
 </table>
     
@@ -177,7 +204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1896">line 1896</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1964">line 1964</a>
     </li></ul></dd>
     
 
@@ -204,7 +231,7 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var recorder = new CanvasRecorder(htmlElement);
+    <pre class="prettyprint"><code>var recorder = new CanvasRecorder(htmlElement, { disableLogs: true });
 recorder.record();
 recorder.stop(function(blob) {
     video.src = URL.createObjectURL(blob);
@@ -286,7 +313,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2015">line 2015</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2084">line 2084</a>
     </li></ul></dd>
     
 
@@ -373,7 +400,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1985">line 1985</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2054">line 2054</a>
     </li></ul></dd>
     
 
@@ -460,7 +487,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1926">line 1926</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1995">line 1995</a>
     </li></ul></dd>
     
 
@@ -547,7 +574,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2000">line 2000</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2069">line 2069</a>
     </li></ul></dd>
     
 
@@ -682,7 +709,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1946">line 1946</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line2015">line 2015</a>
     </li></ul></dd>
     
 

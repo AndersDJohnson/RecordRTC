@@ -160,6 +160,7 @@
 <li><a href="https://www.npmjs.org/package/record-audio">Record Audio and upload to Nodejs server</a></li>
 <li><a href="https://github.com/muaz-khan/ConcatenateBlobs">ConcatenateBlobs.js</a> - Concatenate multiple recordings in single Blob!</li>
 <li><a href="https://www.webrtc-experiment.com/demos/remote-stream-recording.html">Remote stream recording</a></li>
+<li><a href="https://www.webrtc-experiment.com/RecordRTC/Record-Mp3-or-Wav.html">Mp3 or Wav Recording</a></li>
 </ol>
 <h2>How to link?</h2><pre class="prettyprint source"><code>npm install recordrtc
 
@@ -254,7 +255,8 @@ navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catc
 </ul>
 <h2>Record Video</h2><p>Everything is optional except <code>type:'video'</code>:</p>
 <pre class="prettyprint source lang-javascript"><code>var options = {
-   type: 'video'
+   type: 'video',
+   frameInterval: 20 // minimum time between pushing frames to Whammy (in milliseconds)
 };
 var recordRTC = RecordRTC(mediaStream, options);
 recordRTC.startRecording();
@@ -263,22 +265,7 @@ recordRTC.stopRecording(function(videoURL) {
 
     var recordedBlob = recordRTC.getBlob();
     recordRTC.getDataURL(function(dataURL) { });
-});</code></pre><h2><code>onAudioProcessStarted</code></h2><p>Useful to recover audio/video sync issues inside the browser:</p>
-<pre class="prettyprint source lang-javascript"><code>recordAudio = RecordRTC( stream, {
-     onAudioProcessStarted: function( ) {
-         recordVideo.startRecording();
-     }
-});
-
-recordVideo = RecordRTC(stream, {
-    type: 'video'
-});
-
-recordAudio.startRecording();</code></pre><p><code>onAudioProcessStarted</code> fixes shared/exclusive audio gap (a little bit). Because shared audio sometimes causes 100ms delay...
-sometime about 400-to-500 ms delay. 
-Delay depends upon number of applications concurrently requesting same audio devices and CPU/Memory available. 
-Shared mode is the only mode currently available on 90% of windows systems especially on windows 7.</p>
-<h2>Record animated GIF image</h2><p>Everything is optional except <code>type:'gif'</code>:</p>
+});</code></pre><h2>Record animated GIF image</h2><p>Everything is optional except <code>type:'gif'</code>:</p>
 <pre class="prettyprint source lang-javascript"><code>// you must &quot;manually&quot; link:
 // https://cdn.webrtc-experiment.com/gif-recorder.js
 
@@ -287,7 +274,7 @@ var options = {
    frameRate: 200,
    quality: 10
 };
-var recordRTC = RecordRTC(mediaStream, options);
+var recordRTC = RecordRTC(mediaStream || canvas || context, options);
 recordRTC.startRecording();
 recordRTC.stopRecording(function(gifURL) {
    mediaElement.src = gifURL;
@@ -311,12 +298,10 @@ recordRTC.stopRecording(function(videoURL) {
 &lt;/script></code></pre><p>See a demo: <a href="https://www.webrtc-experiment.com/RecordRTC/Canvas-Recording/">/Canvas-Recording/</a></p>
 <h1>API Reference</h1><h2><code>initRecorder</code></h2><p>It is a function that can be used to initiate recorder however skip getting recording outputs. It will provide maximum accuracy in the outputs after using <code>startRecording</code> method. Here is how to use it:</p>
 <pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(mediaStream, {
-  type: 'audio',
   recorderType: StereoAudioRecorder
 });
 
 var videoRecorder = RecordRTC(mediaStream, {
-  type: 'video',
   recorderType: WhammyRecorder
 });
 
@@ -328,7 +313,7 @@ videoRecorder.initRecorder(function() {
   });
 });</code></pre><p>After using <code>stopRecording</code>, you'll see that both WAV/WebM blobs are having following charachteristics:</p>
 <ol>
-<li>Both are having same recording duration i.e. size</li>
+<li>Both are having same recording duration i.e. length</li>
 <li>Video recorder is having no blank frames</li>
 <li>Audio recorder is having no empty buffers</li>
 </ol>
@@ -342,7 +327,6 @@ recordRTC.setRecordingDuration(milliseconds).onRecordingStopped(stoppedCallback)
     video: true
 }).then(function(stream) {
     var recordRTC = RecordRTC(stream, {
-        type: 'video',
         recorderType: WhammyRecorder
     });
 
@@ -356,23 +340,37 @@ recordRTC.setRecordingDuration(milliseconds).onRecordingStopped(stoppedCallback)
 }).catch(function(error) {
     console.error(error);
 });</code></pre><h2><code>clearRecordedData</code></h2><p>This method can be used to clear old recorded frames/buffers. Snippet:</p>
-<pre class="prettyprint source lang-javascript"><code>recorder.clearRecordedData();</code></pre><h2><code>recorderType</code></h2><p>You can force any Recorder by passing this object over RecordRTC constructor:</p>
+<pre class="prettyprint source lang-javascript"><code>recorder.clearRecordedData();</code></pre><h2><code>recorderType</code></h2><p>If you're using <code>recorderType</code> then you don't need to use <code>type</code>. Second one will be redundant i.e. skipped.</p>
+<p>You can force any Recorder by passing this object over RecordRTC constructor:</p>
 <pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(mediaStream, {
-  type: 'audio',
   recorderType: StereoAudioRecorder
 })</code></pre><p>It means that ALL_BROWSERS will be using <a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder</a> i.e. WebAudio API for audio recording.</p>
 <p>This feature brings remote audio recording support in Firefox, and local audio recording support in Microsoft Edge.</p>
 <p>You can even force <code>WhammyRecorder</code> on Firefox however webp format isn't yet supported in standard Firefox builds. It simply means that, you're skipping MediaRecorder API in Firefox.</p>
-<h2><code>disableLogs</code></h2><p>You can disable all the RecordRTC logs by passing this Boolean:</p>
+<h2><code>type</code></h2><p>If you are NOT using <code>recorderType</code> parameter then <code>type</code> parameter can be used to ask RecordRTC choose best recorder-type for recording.</p>
+<pre class="prettyprint source lang-javascript"><code>// if it is Firefox, then RecordRTC will be using MediaStreamRecorder.js
+// if it is Chrome or Opera, then RecordRTC will be using WhammyRecorder.js
+var recordVideo = RecordRTC(mediaStream, {
+  type: 'video'
+});
+
+// if it is Firefox, then RecordRTC will be using MediaStreamRecorder.js
+// if it is Chrome or Opera or Edge, then RecordRTC will be using StereoAudioRecorder.js
+var recordVideo = RecordRTC(mediaStream, {
+  type: 'audio'
+});</code></pre><h2><code>frameInterval</code></h2><p>Set minimum interval (in milliseconds) between each time we push a frame to Whammy recorder.</p>
+<pre class="prettyprint source lang-javascript"><code>var whammyRecorder = RecordRTC(videoStream, {
+  recorderType: WhammyRecorder,
+  frameInterval: 1   // setTimeout interval
+});</code></pre><h2><code>disableLogs</code></h2><p>You can disable all the RecordRTC logs by passing this Boolean:</p>
 <pre class="prettyprint source lang-javascript"><code>var recorder = RecordRTC(mediaStream, {
   disableLogs: true
-});</code></pre><h2><code>audioChannels</code></h2><p>You can force <a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder</a> to record left-audio-channels only.</p>
+});</code></pre><h2><code>numberOfAudioChannels</code></h2><p>You can force <a href="http://RecordRTC.org/StereoAudioRecorder.html">StereoAudioRecorder</a> to record single-audio-channel only. It allows you reduce WAV file size to half.</p>
 <pre class="prettyprint source lang-javascript"><code>var audioRecorder = RecordRTC(audioStream, {
-  type: 'audio',
   recorderType: StereoAudioRecorder,
-  audioChannels: 1 // or leftChannel:true
-});</code></pre><p><em>*It will reduce WAV size to half!</em></p>
-<p>This feature is useful only in Chrome and Microsoft Edge (WAV-recorders).</p>
+  numberOfAudioChannels: 1 // or leftChannel:true
+});</code></pre><p><strong>It will reduce WAV size to half!</strong></p>
+<p>This feature is useful only in Chrome and Microsoft Edge (WAV-recorders). It can work in Firefox as well.</p>
 <h2>How to set video width/height?</h2><pre class="prettyprint source lang-javascript"><code>var options = {
    type: 'video',
    video: {
@@ -383,47 +381,68 @@ recordRTC.setRecordingDuration(milliseconds).onRecordingStopped(stoppedCallback)
       width: 320,
       height: 240
    }
-};</code></pre><h2><code>pauseRecording</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.pauseRecording();</code></pre><h2><code>resumeRecording</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.resumeRecording();</code></pre><h2><code>getDataURL</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.getDataURL(function(dataURL) {
+};
+
+var recordVideo = RecordRTC(MediaStream, options);</code></pre><h2><code>pauseRecording</code></h2><p>RecordRTC pauses recording buffers/frames.</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.pauseRecording();</code></pre><h2><code>resumeRecording</code></h2><p>If you're using &quot;initRecorder&quot; then it asks RecordRTC that now its time to record buffers/frames. Otherwise, it asks RecordRTC to not only initialize recorder but also record buffers/frames.</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.resumeRecording();</code></pre><h2><code>getDataURL</code></h2><p>Optionally get &quot;DataURL&quot; object instead of &quot;Blob&quot;.</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.getDataURL(function(dataURL) {
    mediaElement.src = dataURL;
-});</code></pre><h2><code>getBlob</code></h2><pre class="prettyprint source lang-javascript"><code>blob = recordRTC.getBlob();</code></pre><h2><code>toURL</code></h2><pre class="prettyprint source lang-javascript"><code>window.open( recordRTC.toURL() );</code></pre><h2><code>save</code></h2><pre class="prettyprint source lang-javascript"><code>recordRTC.save();</code></pre><h2><code>bufferSize</code></h2><p>Here is how to customize Buffer-Size for audio recording?</p>
-<pre class="prettyprint source lang-javascript"><code>// From the spec: This value controls how frequently the audioprocess event is 
-// dispatched and how many sample-frames need to be processed each call. 
-// Lower values for buffer size will result in a lower (better) latency. 
+});</code></pre><h2><code>getBlob</code></h2><p>Get &quot;Blob&quot; object. A blob object looks similar to <code>input[type=file]</code>. Which means that you can append it to <code>FormData</code> and upload to server using XMLHttpRequest object. Even socket.io nowadays supports blob-transmission.</p>
+<pre class="prettyprint source lang-javascript"><code>blob = recordRTC.getBlob();</code></pre><h2><code>toURL</code></h2><p>A virtual URL. It can be used only inside the same browser. You can't share it. It is just providing a preview of the recording.</p>
+<pre class="prettyprint source lang-javascript"><code>window.open( recordRTC.toURL() );</code></pre><h2><code>save</code></h2><p>Invoke save-as dialog. You can pass &quot;fileName&quot; as well; though fileName argument is optional.</p>
+<pre class="prettyprint source lang-javascript"><code>recordRTC.save('File Name');</code></pre><h2><code>bufferSize</code></h2><p>Here is how to customize Buffer-Size for audio recording?</p>
+<pre class="prettyprint source lang-javascript"><code>// From the spec: This value controls how frequently the audioprocess event is
+// dispatched and how many sample-frames need to be processed each call.
+// Lower values for buffer size will result in a lower (better) latency.
 // Higher values will be necessary to avoid audio breakup and glitches
 // bug: how to minimize wav size?
 // workaround? obviously ffmpeg!
-// The size of the buffer (in sample-frames) which needs to 
-// be processed each time onprocessaudio is called. 
+// The size of the buffer (in sample-frames) which needs to
+// be processed each time onprocessaudio is called.
 
-// Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384). 
+// Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
 
 var options = {
    bufferSize: 16384
 };
 var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Following values are allowed for buffer-size:</p>
-<pre class="prettyprint source lang-javascript"><code>// Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384)</code></pre><p>You can write like this:</p>
-<pre class="prettyprint source lang-javascript"><code>var options = {
-   'buffer-size': 16384
-};</code></pre><h2><code>sampleRate</code></h2><p>Here is jow to customize Sample-Rate for audio recording?</p>
-<pre class="prettyprint source lang-javascript"><code>// The sample rate (in sample-frames per second) at which the 
-// AudioContext handles audio. It is assumed that all AudioNodes 
-// in the context run at this rate. In making this assumption, 
-// sample-rate converters or &quot;varispeed&quot; processors are not supported 
+<pre class="prettyprint source lang-javascript"><code>// Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384)</code></pre><p>If you passed invalid value then you'll get blank audio.</p>
+<h2><code>sampleRate</code></h2><p>Here is jow to customize Sample-Rate for audio recording?</p>
+<pre class="prettyprint source lang-javascript"><code>// The sample rate (in sample-frames per second) at which the
+// AudioContext handles audio. It is assumed that all AudioNodes
+// in the context run at this rate. In making this assumption,
+// sample-rate converters or &quot;varispeed&quot; processors are not supported
 // in real-time processing.
-// The sampleRate parameter describes the sample-rate of the 
-// linear PCM audio data in the buffer in sample-frames per second. 
+// The sampleRate parameter describes the sample-rate of the
+// linear PCM audio data in the buffer in sample-frames per second.
 
-// An implementation must support sample-rates in at least 
+// An implementation must support sample-rates in at least
 // the range 22050 to 96000.
 
 var options = {
    sampleRate: 96000
 };
 var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sample-rate must be greater than or equal to 22050 and less than or equal to 96000.</p>
-<p>You can write like this:</p>
-<pre class="prettyprint source lang-javascript"><code>var options = {
-   'sample-rate': 16384
-};</code></pre><h2><code>autoWriteToDisk</code></h2><p>Using <code>autoWriteToDisk</code>; you can suggest RecordRTC to auto-write to indexed-db as soon as you call <code>stopRecording</code> method.</p>
+<p>If you passed invalid value then you'll get blank audio.</p>
+<p>You can pass custom sample-rate values only on Mac (or additionally maybe on Windows 10).</p>
+<h2><code>onAudioProcessStarted</code></h2><p>Note: &quot;initRecorder&quot; is preferred over this old hack. Both works similarly.</p>
+<p>Useful to recover audio/video sync issues inside the browser:</p>
+<pre class="prettyprint source lang-javascript"><code>recordAudio = RecordRTC( stream, {
+     onAudioProcessStarted: function( ) {
+         recordVideo.startRecording();
+     }
+});
+
+recordVideo = RecordRTC(stream, {
+    type: 'video'
+});
+
+recordAudio.startRecording();</code></pre><p><code>onAudioProcessStarted</code> fixes shared/exclusive audio gap (a little bit). Because shared audio sometimes causes 100ms delay...
+sometime about 400-to-500 ms delay.
+Delay depends upon number of applications concurrently requesting same audio devices and CPU/Memory available.
+Shared mode is the only mode currently available on 90% of windows systems especially on windows 7.</p>
+<h2><code>autoWriteToDisk</code></h2><p>Using <code>autoWriteToDisk</code>; you can suggest RecordRTC to auto-write to indexed-db as soon as you call <code>stopRecording</code> method.</p>
 <pre class="prettyprint source lang-javascript"><code>var recordRTC = RecordRTC(MediaStream, {
     autoWriteToDisk: true
 });</code></pre><p><code>autoWriteToDisk</code> is helpful for single stream recording and writing to disk; however for <code>MRecordRTC</code>; <code>writeToDisk</code> is preferred one.</p>
