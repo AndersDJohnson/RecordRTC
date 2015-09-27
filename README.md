@@ -24,10 +24,15 @@ Steps to contribute:
 npm install recordrtc.org
 
 # Second step: generate HTML files from template & latest.js file
-cd .\node_modules\recordrtc.org
+cd node_modules && cd recordrtc.org
 
 # This command generates HTML pages from latest.js file
-node_modules\.bin\jsdoc node_modules\recordrtc\RecordRTC.js -d .\..\..\recordrtc.org node_modules\recordrtc\README.md -t template
+
+# for Linux/Mac
+node_modules/.bin/jsdoc node_modules/recordrtc/RecordRTC.js -d ./../../recordrtc-gh-pages node_modules/recordrtc/README.md -t template
+
+# for Windows
+node_modules\.bin\jsdoc node_modules\recordrtc\RecordRTC.js -d .\..\..\recordrtc-gh-pages node_modules\recordrtc\README.md -t template
 ```
 
 Now you'll see a directory with name `recordrtc.org`.
@@ -35,6 +40,11 @@ Now you'll see a directory with name `recordrtc.org`.
 ```
 # This command runs index.html file
 # You can use it to preview HTML pages (doc files)
+
+# for Linux/mac
+./../../recordrtc.org/index.html
+
+# for Windows
 .\..\..\recordrtc.org\index.html
 ```
 
