@@ -55,11 +55,38 @@
 
     
 
+<article>
+    <header style="text-align: center;">
+        <h1>
+            <a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/" target="_blank">WebRTC</a> audio/video recording ®
+            <a href="https://github.com/muaz-khan" target="_blank">Muaz Khan</a>
+        </h1>        
+        <p>
+            <span> &copy; </span>
+            <a href="http://www.MuazKhan.com/">Muaz Khan</a>
+            . <a href="http://twitter.com/WebRTCWeb" title="Twitter profile for WebRTC Experiments">@WebRTCWeb</a>
+            . <a href="https://github.com/muaz-khan?tab=repositories"title="Github Profile">Github</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/issues?state=open">Latest issues</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/commits/master">What's New?</a>
+        </p>
+    </header>
+    
+    <div class="github-stargazers"></div>
 
-    <h3> </h3>
+	
 
-
-
+    <section class="experiment">
+        <p style="margin-top: 0;">
+            RecordRTC is MIT licensed on Github! <a href="https://github.com/muaz-khan/RecordRTC" target="_blank">Documentation</a>
+        </p>
+    </section>
+    
+    <section class="experiment">
+        <h2 class="header" id="feedback">Help Improve Documentation</h2>
+        <div><textarea id="message" style="border: 1px solid rgb(189, 189, 189); height: 8em; margin: .2em; outline: none; resize: vertical; width: 98%;" placeholder="Have any message or suggestions to improve documentation?"></textarea></div>
+        <button id="send-message" style="font-size: 1em;">Send Private Message</button><small style="margin-left: 1em;">Enter your email too; if you want "direct" reply!</small>
+    </section>
+</article>
 
 
 
@@ -69,15 +96,33 @@
 
     
 
+<article>
+    <header style="text-align: center;">
+        <h1>
+            <a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/" target="_blank">WebRTC</a> audio/video recording ®
+            <a href="https://github.com/muaz-khan" target="_blank">Muaz Khan</a>
+        </h1>        
+        <p>
+            <span> &copy; </span>
+            <a href="http://www.MuazKhan.com/">Muaz Khan</a>
+            . <a href="http://twitter.com/WebRTCWeb" title="Twitter profile for WebRTC Experiments">@WebRTCWeb</a>
+            . <a href="https://github.com/muaz-khan?tab=repositories"title="Github Profile">Github</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/issues?state=open">Latest issues</a>
+            . <a href="https://github.com/muaz-khan/RecordRTC/commits/master">What's New?</a>
+        </p>
+    </header>
+    
+    <div class="github-stargazers"></div>
 
-
-
-    <section>
-        <article><h1><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/">WebRTC</a> audio/video recording</h1><p><a href="http://RecordRTC.org/">RecordRTC Documentation</a> / <a href="https://github.com/muaz-khan/RecordRTC/wiki">RecordRTC Wiki Pages</a> / <a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC Demo</a> / <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a></p>
+	
+	    <h1><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC</a>: <a href="https://www.webrtc-experiment.com/">WebRTC</a> audio/video recording</h1><p><a href="http://RecordRTC.org/">RecordRTC Documentation</a> / <a href="https://github.com/muaz-khan/RecordRTC/wiki">RecordRTC Wiki Pages</a> / <a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC Demo</a> / <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a></p>
 <p><a href="https://npmjs.org/package/recordrtc"><img src="https://img.shields.io/npm/v/recordrtc.svg" alt="npm"></a> <a href="https://npmjs.org/package/recordrtc"><img src="https://img.shields.io/npm/dm/recordrtc.svg" alt="downloads"></a> <a href="https://travis-ci.org/muaz-khan/RecordRTC"><img src="https://travis-ci.org/muaz-khan/RecordRTC.png?branch=master" alt="Build Status: Linux"></a></p>
 <blockquote>
 <p><a href="https://www.webrtc-experiment.com/RecordRTC/">RecordRTC</a> is a JavaScript-based media-recording library for modern web-browsers (supporting WebRTC getUserMedia API). It is optimized for different devices and browsers to bring all client-side (pluginfree) recording solutions in single place.</p>
 </blockquote>
+<h1>Check all releases:</h1><ul>
+<li>https://github.com/muaz-khan/RecordRTC/releases</li>
+</ul>
 <p>Please check <a href="https://github.com/muaz-khan/RecordRTC/tree/master/dev">dev</a> directory for development files.</p>
 <ol>
 <li><a href="http://RecordRTC.org/RecordRTC.html">RecordRTC API Reference</a></li>
@@ -198,6 +243,12 @@ navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catc
 function successCallback(stream) {
     // RecordRTC usage goes here
 
+    var options = {
+      mimeType: 'video/webm', // or video/mp4 or audio/ogg
+      audioBitsPerSecond: 128000,
+      videoBitsPerSecond: 128000,
+      bitsPerSecond: 128000 // if this line is provided, skip above two
+    };
     recordRTC = RecordRTC(MediaStream);
     recordRTC.startRecording();
 }
@@ -426,7 +477,29 @@ var options = {
 var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sample-rate must be greater than or equal to 22050 and less than or equal to 96000.</p>
 <p>If you passed invalid value then you'll get blank audio.</p>
 <p>You can pass custom sample-rate values only on Mac (or additionally maybe on Windows 10).</p>
-<h2><code>onAudioProcessStarted</code></h2><p>Note: &quot;initRecorder&quot; is preferred over this old hack. Both works similarly.</p>
+<h2><code>mimeType</code></h2><p>This option allows you set MediaRecorder output format (currently works only in Firefox; Chrome support coming soon):</p>
+<pre class="prettyprint source lang-javascript"><code>var options = {
+  mimeType 'video/webm', // or video/mp4 or audio/ogg
+  bitsPerSecond: 128000
+};
+var recorder = RecordRTC(mediaStream, options);</code></pre><p>Note: For chrome, it will simply auto-set <code>type:audio or video</code> parameters to keep supporting <code>StereoAudioRecorder.js</code> and <code>WhammyRecorder.js</code>.</p>
+<p>That is, you can skip passing <code>type:audio</code> parameter when you're using <code>mimeType</code> parameter.</p>
+<h2><code>bitsPerSecond</code></h2><p>The chosen bitrate for the audio and video components of the media. If this is specified along with one or the other of the above properties, this will be used for the one that isn't specified.</p>
+<pre class="prettyprint source lang-javascript"><code>var options = {
+  mimeType 'video/webm', // or video/mp4 or audio/ogg
+  bitsPerSecond: 128000
+};
+var recorder = RecordRTC(mediaStream, options);</code></pre><h2><code>audioBitsPerSecond</code></h2><p>The chosen bitrate for the audio component of the media.</p>
+<pre class="prettyprint source lang-javascript"><code>var options = {
+  mimeType 'audio/ogg',
+  audioBitsPerSecond: 128000
+};
+var recorder = RecordRTC(mediaStream, options);</code></pre><h2><code>videooBitsPerSecond</code></h2><p>The chosen bitrate for the video component of the media.</p>
+<pre class="prettyprint source lang-javascript"><code>var options = {
+  mimeType 'video/webm', // or video/mp4
+  videooBitsPerSecond: 128000
+};
+var recorder = RecordRTC(mediaStream, options);</code></pre><h2><code>onAudioProcessStarted</code></h2><p>Note: &quot;initRecorder&quot; is preferred over this old hack. Both works similarly.</p>
 <p>Useful to recover audio/video sync issues inside the browser:</p>
 <pre class="prettyprint source lang-javascript"><code>recordAudio = RecordRTC( stream, {
      onAudioProcessStarted: function( ) {
@@ -509,9 +582,21 @@ recordRTC.getFromDisk(function(dataURL) {
 <ul>
 <li>https://github.com/muaz-khan/RecordRTC/tree/gh-pages</li>
 </ul>
-<h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="http://www.MuazKhan.com">Muaz Khan</a>.</p></article>
-    </section>
+<h2>License</h2><p><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC.js</a> is released under <a href="https://www.webrtc-experiment.com/licence/">MIT licence</a> . Copyright (c) <a href="http://www.MuazKhan.com">Muaz Khan</a>.</p>
+	
 
+    <section class="experiment">
+        <p style="margin-top: 0;">
+            RecordRTC is MIT licensed on Github! <a href="https://github.com/muaz-khan/RecordRTC" target="_blank">Documentation</a>
+        </p>
+    </section>
+    
+    <section class="experiment">
+        <h2 class="header" id="feedback">Help Improve Documentation</h2>
+        <div><textarea id="message" style="border: 1px solid rgb(189, 189, 189); height: 8em; margin: .2em; outline: none; resize: vertical; width: 98%;" placeholder="Have any message or suggestions to improve documentation?"></textarea></div>
+        <button id="send-message" style="font-size: 1em;">Send Private Message</button><small style="margin-left: 1em;">Enter your email too; if you want "direct" reply!</small>
+    </section>
+</article>
 
 
 
@@ -520,7 +605,7 @@ recordRTC.getFromDisk(function(dataURL) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
+    <h2><a href="index.html">Homepage</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GetRecorderType.html">GetRecorderType</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="RecordRTCConfiguration.html">RecordRTCConfiguration</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#invokeSaveAsDialog">invokeSaveAsDialog</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
 </nav>
 
 <br clear="both">
