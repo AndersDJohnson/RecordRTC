@@ -18,9 +18,8 @@
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
+	<link rel="stylesheet" href="https://cdn.webrtc-experiment.com/style.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-    
-    <link rel="stylesheet" href="https://cdn.webrtc-experiment.com/style.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     
     <style>
@@ -38,8 +37,8 @@
         }
         
         .github-stargazers {
-            top: 0;
-            right: 0;
+            top: 10px;
+            left: 30%;
         }
     </style>
     
@@ -211,7 +210,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1311">line 1311</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1642">line 1642</a>
     </li></ul></dd>
     
 
@@ -245,20 +244,7 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var options = {
-    mimeType: 'video/mp4', // audio/ogg or video/webm
-    audioBitsPerSecond : 128000,
-    videoBitsPerSecond : 2500000,
-    bitsPerSecond: 2500000  // if this is provided, skip above two
-}
-var recorder = new MediaStreamRecorder(MediaStream, options);
-recorder.record();
-recorder.stop(function(blob) {
-    video.src = URL.createObjectURL(blob);
-
-    // or
-    var blob = recorder.blob;
-});</code></pre>
+    <pre class="prettyprint"><code>var options = {    mimeType: 'video/webm',    audioBitsPerSecond : 256 * 8 * 1024,    videoBitsPerSecond : 256 * 8 * 1024,    bitsPerSecond: 256 * 8 * 1024,  // if this is provided, skip above two    getNativeBlob: true // by default: it is false}var recorder = new MediaStreamRecorder(MediaStream, options);recorder.record();recorder.stop(function(blob) {    video.src = URL.createObjectURL(blob);    // or    var blob = recorder.blob;});</code></pre>
 
     
 </dd>
@@ -373,7 +359,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1420">line 1420</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1785">line 1785</a>
     </li></ul></dd>
     
 
@@ -390,9 +376,7 @@ recorder.stop(function(blob) {
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function() {
-    var blob = recorder.blob;
-});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function() {    var blob = recorder.blob;});</code></pre>
 
     
 </dd>
@@ -458,7 +442,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1553">line 1553</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1927">line 1927</a>
     </li></ul></dd>
     
 
@@ -545,7 +529,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1512">line 1512</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1883">line 1883</a>
     </li></ul></dd>
     
 
@@ -632,7 +616,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1374">line 1374</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1708">line 1708</a>
     </li></ul></dd>
     
 
@@ -719,7 +703,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1529">line 1529</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1900">line 1900</a>
     </li></ul></dd>
     
 
@@ -854,7 +838,7 @@ recorder.stop(function(blob) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1488">line 1488</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line1853">line 1853</a>
     </li></ul></dd>
     
 
@@ -881,9 +865,7 @@ recorder.stop(function(blob) {
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>recorder.stop(function(blob) {
-    video.src = URL.createObjectURL(blob);
-});</code></pre>
+    <pre class="prettyprint"><code>recorder.stop(function(blob) {    video.src = URL.createObjectURL(blob);});</code></pre>
 
     
 </dd>
@@ -903,18 +885,30 @@ recorder.stop(function(blob) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Homepage</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GetRecorderType.html">GetRecorderType</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="RecordRTCConfiguration.html">RecordRTCConfiguration</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#invokeSaveAsDialog">invokeSaveAsDialog</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
+    <h2><a href="/">Homepage</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GetRecorderType.html">GetRecorderType</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="MultiStreamRecorder.html">MultiStreamRecorder</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="RecordRTCConfiguration.html">RecordRTCConfiguration</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#invokeSaveAsDialog">invokeSaveAsDialog</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <a href="https://github.com/muaz-khan/RecordRTC" class="fork-left"></a>
 
-    <article>
-            <h2 class="header" id="feedback">Help Improve Documentation</h2>
-            <div><textarea id="message" style="border: 1px solid rgb(189, 189, 189); height: 8em; margin: .2em; outline: none; resize: vertical; width: 98%;" placeholder="Have any message or suggestions to improve documentation?"></textarea></div>
-            <button id="send-message" style="font-size: 1em;">Send Private Message</button><small style="margin-left: 1em;">Enter your email too; if you want "direct" reply!</small>
-    </article>
+<div style="margin: 2.5em auto 0 auto;padding: 2em;">
+	<section class="experiment own-widgets">
+		<h2 class="header" id="updates" style="color: red; padding-bottom: .1em;"><a href="https://github.com/muaz-khan/RecordRTC/issues" target="_blank">RecordRTC Issues</a></h2>
+		<div id="github-issues"></div>
+	</section>
+
+	<article>
+		<h2 class="header" id="feedback">Help Improve Documentation</h2>
+		<div><textarea id="message" style="border: 1px solid rgb(189, 189, 189); height: 8em; margin: .2em; outline: none; resize: vertical; width: 98%;" placeholder="Have any message or suggestions to improve documentation?"></textarea></div>
+		<button id="send-message" style="font-size: 1em;">Send Private Message</button><small style="margin-left: 1em;">Enter your email too; if you want "direct" reply!</small>
+	</article>
+</div>
+
+<section class="experiment own-widgets latest-commits">
+	<h2 class="header" id="updates" style="color: red; padding-bottom: .1em;"><a href="https://github.com/muaz-khan/RecordRTC/commits/master" target="_blank">Latest Updates</a></h2>
+	<div id="github-commits"></div>
+</section>
 
 <footer>
     <a href="https://www.webrtc-experiment.com/">WebRTC Experiments</a>
@@ -928,6 +922,9 @@ recorder.stop(function(blob) {
 <script src="scripts/linenumber.js"> </script>
 
 <!-- commits.js is useless for you! -->
+<script>
+	window.useThisGithubPath = 'muaz-khan/RecordRTC';
+</script>
 <script src="https://cdn.webrtc-experiment.com/commits.js" async> </script>
 <a href="https://plus.google.com/+WebRTC-Experiment" rel="publisher"></a>
 </body>
