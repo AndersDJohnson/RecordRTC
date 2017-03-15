@@ -24,7 +24,8 @@ Steps to contribute:
 npm install recordrtc.org
 
 # Second step: generate HTML files from template & latest.js file
-cd node_modules && cd recordrtc.org
+cd node_modules
+cd recordrtc.org
 
 # This command generates HTML pages from latest.js file
 

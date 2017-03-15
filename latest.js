@@ -1,4 +1,6 @@
-// Last time updated: 2017-02-17 6:31:53 AM UTC
+'use strict';
+
+// Last time updated: 2017-03-11 2:27:37 PM UTC
 
 // ________________
 // RecordRTC v5.4.1
@@ -9,8 +11,6 @@
 // Muaz Khan     - www.MuazKhan.com
 // MIT License   - www.WebRTC-Experiment.com/licence
 // --------------------------------------------------
-
-'use strict';
 
 // ____________
 // RecordRTC.js
@@ -228,10 +228,27 @@ function RecordRTC(mediaStream, config) {
         }
     }
 
-    function handleRecordingDuration() {
-        setTimeout(function() {
+    function handleRecordingDuration(counter) {
+        counter = counter || 0;
+        
+        if (self.blob && self.blob.size) {
+            // manually stopped
+            if (!config.disableLogs) {
+                console.info('Ignored recording duration.');
+            }
+            return;
+        }
+
+        if (counter >= self.recordingDuration) {
             stopRecording(self.onRecordingStopped);
-        }, self.recordingDuration);
+            return;
+        }
+
+        counter += 1000; // 1-second
+
+        setTimeout(function() {
+            handleRecordingDuration(counter);
+        }, 1000);
     }
 
     var WARNING = 'It seems that "startRecording" is not invoked for ' + config.type + ' recorder.';
@@ -301,16 +318,16 @@ function RecordRTC(mediaStream, config) {
          * @example
          * recordRTC.setRecordingDuration();
          */
-        setRecordingDuration: function(milliseconds, callback) {
-            if (typeof milliseconds === 'undefined') {
-                throw 'milliseconds is required.';
+        setRecordingDuration: function(recordingDuration, callback) {
+            if (typeof recordingDuration === 'undefined') {
+                throw 'recordingDuration is required.';
             }
 
-            if (typeof milliseconds !== 'number') {
-                throw 'milliseconds must be a number.';
+            if (typeof recordingDuration !== 'number') {
+                throw 'recordingDuration must be a number.';
             }
 
-            self.recordingDuration = milliseconds;
+            self.recordingDuration = recordingDuration;
             self.onRecordingStopped = callback || function() {};
 
             return {
@@ -1370,11 +1387,26 @@ if (typeof requestAnimationFrame === 'undefined') {
     if (typeof webkitRequestAnimationFrame !== 'undefined') {
         /*global requestAnimationFrame:true */
         requestAnimationFrame = webkitRequestAnimationFrame;
-    }
-
-    if (typeof mozRequestAnimationFrame !== 'undefined') {
+    } else if (typeof mozRequestAnimationFrame !== 'undefined') {
         /*global requestAnimationFrame:true */
         requestAnimationFrame = mozRequestAnimationFrame;
+    } else if (typeof msRequestAnimationFrame !== 'undefined') {
+        /*global requestAnimationFrame:true */
+        requestAnimationFrame = msRequestAnimationFrame;
+    } else if (typeof requestAnimationFrame === 'undefined') {
+        // via: https://gist.github.com/paulirish/1579671
+        var lastTime = 0;
+
+        /*global requestAnimationFrame:true */
+        requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
     }
 }
 
@@ -1384,11 +1416,17 @@ if (typeof cancelAnimationFrame === 'undefined') {
     if (typeof webkitCancelAnimationFrame !== 'undefined') {
         /*global cancelAnimationFrame:true */
         cancelAnimationFrame = webkitCancelAnimationFrame;
-    }
-
-    if (typeof mozCancelAnimationFrame !== 'undefined') {
+    } else if (typeof mozCancelAnimationFrame !== 'undefined') {
         /*global cancelAnimationFrame:true */
         cancelAnimationFrame = mozCancelAnimationFrame;
+    } else if (typeof msCancelAnimationFrame !== 'undefined') {
+        /*global cancelAnimationFrame:true */
+        cancelAnimationFrame = msCancelAnimationFrame;
+    } else if (typeof cancelAnimationFrame === 'undefined') {
+        /*global cancelAnimationFrame:true */
+        cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
     }
 }
 
@@ -1809,6 +1847,16 @@ function MediaStreamRecorder(mediaStream, config) {
                 }
             }
 
+            (function(looper) {
+                if (!self.manuallyStopped && mediaRecorder && mediaRecorder.state === 'inactive') {
+                    // 10 minutes, enough?
+                    mediaRecorder.start(10 * 60 * 1000);
+                    return;
+                }
+
+                setTimeout(looper, 1000);
+            })();
+
             // When the stream is "ended" set recording to 'inactive' 
             // and stop gathering data. Callers should not rely on 
             // exactness of the timeSlice value, especially 
@@ -1825,7 +1873,7 @@ function MediaStreamRecorder(mediaStream, config) {
         // handler. "mTimeSlice < 0" means Session object does not push encoded data to
         // onDataAvailable, instead, it passive wait the client side pull encoded data
         // by calling requestData API.
-        mediaRecorder.start(3.6e+6);
+        mediaRecorder.start(3.6e+6); // default is 60 minutes; enough?
 
         // Start recording. If timeSlice has been provided, mediaRecorder will
         // raise a dataavailable event containing the Blob of collected data on every timeSlice milliseconds.
@@ -1851,6 +1899,8 @@ function MediaStreamRecorder(mediaStream, config) {
      * });
      */
     this.stop = function(callback) {
+        self.manuallyStopped = true; // used inside the mediaRecorder.onerror
+
         if (!mediaRecorder) {
             return;
         }
@@ -2717,6 +2767,11 @@ function CanvasRecorder(htmlElement, config) {
      */
     this.pause = function() {
         isPausedRecording = true;
+
+        if (mediaStreamRecorder instanceof MediaStreamRecorder) {
+            mediaStreamRecorder.pause();
+            return;
+        }
     };
 
     /**
@@ -2728,6 +2783,11 @@ function CanvasRecorder(htmlElement, config) {
      */
     this.resume = function() {
         isPausedRecording = false;
+
+        if (mediaStreamRecorder instanceof MediaStreamRecorder) {
+            mediaStreamRecorder.resume();
+            return;
+        }
 
         if (!isRecording) {
             this.record();
@@ -2965,15 +3025,18 @@ function WhammyRecorder(mediaStream, config) {
         var i = -1,
             length = o.length;
 
-        var loop = function() {
+        (function loop() {
             i++;
             if (i === length) {
                 o.callback();
                 return;
             }
-            o.functionToLoop(loop, i);
-        };
-        loop(); //init
+
+            // "setTimeout" added by Jim McLeod
+            setTimeout(function() {
+                o.functionToLoop(loop, i);
+            }, 1);
+        })();
     }
 
 
@@ -4062,7 +4125,7 @@ if (typeof RecordRTC !== 'undefined') {
  * @example
  * var options = {
  *     mimeType: 'video/webm',
- *		video: {
+ *      video: {
  *          width: 360,
  *          height: 240
  *      }
@@ -4163,6 +4226,10 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         self.audioContext = new AudioContext();
         var audioSources = [];
 
+        self.gainNode = self.audioContext.createGain();
+        self.gainNode.connect(self.audioContext.destination);
+        self.gainNode.gain.value = 0; // don't hear self
+
         var audioTracksLength = 0;
         arrayOfMediaStreams.forEach(function(stream) {
             if (!stream.getAudioTracks().length) {
@@ -4171,7 +4238,9 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
 
             audioTracksLength++;
 
-            audioSources.push(self.audioContext.createMediaStreamSource(stream));
+            var audioSource = self.audioContext.createMediaStreamSource(stream);
+            audioSource.connect(self.gainNode);
+            audioSources.push(audioSource);
         });
 
         if (!audioTracksLength) {
@@ -4198,6 +4267,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
             var video = getVideo(stream);
             video.width = options.video.width;
             video.height = options.video.height;
+            video.stream = stream;
             videos.push(video);
         });
 
@@ -4208,7 +4278,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         } else if ('mozCaptureStream' in canvas) {
             capturedStream = canvas.mozCaptureStream();
         } else if (!options.disableLogs) {
-            console.error('captureStream API requires this flag: chrome://flags/#enable-experimental-web-platform-features');
+            console.error('Upgrade to latest Chrome or otherwise enable this flag: chrome://flags/#enable-experimental-web-platform-features');
         }
 
         return capturedStream;
@@ -4217,6 +4287,8 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
     function getVideo(stream) {
         var video = document.createElement('video');
         video.src = URL.createObjectURL(stream);
+        video.muted = true;
+        video.volume = 0;
         video.play();
         return video;
     }
@@ -4229,67 +4301,71 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
         }
 
         var videosLength = videos.length;
-		
-		canvas.width = videosLength > 1 ? videos[0].width * 2 : videos[0].width;
-        canvas.height = videosLength > 2 ? videos[0].height * 2 : videos[0].height;
-		
-        videos.forEach(function(video, idx) {
-            if (videosLength === 1) {
-                context.drawImage(video, 0, 0, video.width, video.height);
-                return;
+
+        var fullcanvas = false;
+        videos.forEach(function(video) {
+            if (!video.stream) {
+                video.stream = {};
             }
 
-            if (videosLength === 2) {
-                var x = 0;
-                var y = 0;
-
-                if (idx === 1) {
-                    x = video.width;
-                }
-
-                context.drawImage(video, x, y, video.width, video.height);
-                return;
-            }
-
-            if (videosLength === 3) {
-                var x = 0;
-                var y = 0;
-
-                if (idx === 1) {
-                    x = video.width;
-                }
-
-                if (idx === 2) {
-                    y = video.height;
-                }
-
-                context.drawImage(video, x, y, video.width, video.height);
-                return;
-            }
-
-            if (videosLength === 4) {
-                var x = 0;
-                var y = 0;
-
-                if (idx === 1) {
-                    x = video.width;
-                }
-
-                if (idx === 2) {
-                    y = video.height;
-                }
-
-                if (idx === 3) {
-                    x = video.width;
-                    y = video.height;
-                }
-
-                context.drawImage(video, x, y, video.width, video.height);
-                return;
+            if (video.stream.fullcanvas) {
+                fullcanvas = video.stream;
             }
         });
 
+        if (fullcanvas) {
+            canvas.width = fullcanvas.width;
+            canvas.height = fullcanvas.height;
+        } else {
+            canvas.width = videosLength > 1 ? videos[0].width * 2 : videos[0].width;
+            canvas.height = videosLength > 2 ? videos[0].height * 2 : videos[0].height;
+        }
+
+        videos.forEach(drawImage);
+
         setTimeout(drawVideosToCanvas, options.frameInterval);
+    }
+
+    function drawImage(video, idx) {
+        var x = 0;
+        var y = 0;
+        var width = video.width;
+        var height = video.height;
+
+        if (idx === 1) {
+            x = video.width;
+        }
+
+        if (idx === 2) {
+            y = video.height;
+        }
+
+        if (idx === 3) {
+            x = video.width;
+            y = video.height;
+        }
+
+        if (typeof video.stream.left !== 'undefined') {
+            x = video.stream.left;
+        }
+
+        if (typeof video.stream.top !== 'undefined') {
+            y = video.stream.top;
+        }
+
+        if (typeof video.stream.width !== 'undefined') {
+            width = video.stream.width;
+        }
+
+        if (typeof video.stream.height !== 'undefined') {
+            height = video.stream.height;
+        }
+
+        context.drawImage(video, x, y, width, height);
+
+        if (typeof video.stream.onRender === 'function') {
+            video.stream.onRender(context, x, y, width, height, video.stream);
+        }
     }
 
     var canvas = document.createElement('canvas');
@@ -4297,7 +4373,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
 
     canvas.style = 'opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000;';
 
-    document.body.appendChild(canvas);
+    (document.body || document.documentElement).appendChild(canvas);
 
     /**
      * This method pauses the recording process.
@@ -4365,6 +4441,7 @@ function MultiStreamRecorder(arrayOfMediaStreams, options) {
             var video = getVideo(stream);
             video.width = options.video.width;
             video.height = options.video.height;
+            video.stream = stream;
             videos.push(video);
         }
 
