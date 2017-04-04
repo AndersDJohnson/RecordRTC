@@ -358,7 +358,7 @@ recordRTC.stopRecording(function(audioURL) {
 <li><a href="https://github.com/muaz-khan/RecordRTC/blob/master/simple-demos/multi-cameras-recording.html">Record all your cameras</a></li>
 <li><a href="https://github.com/muaz-khan/RecordRTC/blob/master/simple-demos/video-plus-screen-recording.html">Record screen as well as your video!</a></li>
 </ol>
-<p>You can record 4 parallel videos/streams (<strong>WebRTC Conference</strong>):</p>
+<p>You can record many videos/streams in single WebM/Mp4 file (<strong>WebRTC Conference Recording</strong>):</p>
 <pre class="prettyprint source lang-javascript"><code>var arrayOfStreams = [localStream, remoteStream1, remoteStream2, remoteStream3];
 
 var recordRTC = RecordRTC(arrayOfStreams, {
@@ -375,27 +375,60 @@ recordRTC.stopRecording(function(singleWebM) {
 
     var recordedBlob = recordRTC.getBlob();
     recordRTC.getDataURL(function(dataURL) { });
-});</code></pre><blockquote>
-<p>This simply means that: <strong>You can record 4 users video conference in single WebM or Mp4 container!</strong></p>
-</blockquote>
-<p>Points:</p>
+});</code></pre><p>Points:</p>
 <ol>
 <li>Instead of passing single <code>MediaStream</code>, you are passing array of <code>MediaStreams</code></li>
-<li>You are keeping the <code>type=video</code></li>
 <li>You will get single webm or mp4 according to your <code>mimeType</code></li>
 </ol>
-<h2><code>addStream</code></h2><blockquote>
-<p>This section is related to above section &quot;Record Multiple Videos&quot;.</p>
-</blockquote>
-<p><code>MultiStreamRecorder.js</code> now supports <code>addStream</code> method; which allows you add additional streams on the fly (during a recording):</p>
-<pre class="prettyprint source lang-javascript"><code>recorder.startRecording();
-
-setTimeout(function() {
-    recorder.addStream(anotherStream);
-}, 5000);</code></pre><p>Points:</p>
+<p><code>MultiStreamRecorder.js</code> supports two extra methods:</p>
 <ol>
-<li>You can add any kind of stream: audio and/or video.</li>
-<li>You can add any number of streams; there is no limit.</li>
+<li><code>addStreams</code></li>
+<li><code>resetVideoStreams</code></li>
+</ol>
+<pre class="prettyprint source lang-javascript"><code>var msRecorder = recorder.getInternalRecorder();
+if (msRecorder instanceof MultiStreamRecorder) {
+    msRecorder.addStreams([newAudioStream]);
+    msRecorder.resetVideoStreams([screenStream]);
+}</code></pre><p>Usecases:</p>
+<ol>
+<li>You can add more audio and/or video streams during live recording (using <code>addStreams</code> method)</li>
+<li>You can reset/remove/replace old videos using <code>resetVideoStreams</code></li>
+</ol>
+<p><code>resetVideoStreams</code> can be used to recorded screenStream in full-screen mode e.g.</p>
+<pre class="prettyprint source lang-javascript"><code>if (yourScreen.isScreen === true) {
+    yourScreen.fullcanvas = true;
+    yourScreen.width = window.screen.width;
+    yourScreen.height = window.screen.height;
+
+    // now it will record all audios + only_this_screen
+    internalRecorder.resetVideoStreams([yourScreen]);
+}</code></pre><p>As soon as <a href="https://www.webrtc-experiment.com/webrtcpedia/#stream-ended-listener">screen is stopped</a>:</p>
+<pre class="prettyprint source lang-javascript"><code>addStreamStopListener(yourScreen, function() {
+    var cameraStreams = getSingleOrMultipleCameraStreams();
+
+    // now it will record all audios + all_your_cameras
+    internalRecorder.resetVideoStreams(cameraStreams);
+});</code></pre><h2><code>getInternalRecorder</code></h2><p>You can get access to internal recorders e.g. MultiStreamRecorder, MediaStreamRecorder, StereoAudioRecorder, WhammyRecorder etc.</p>
+<blockquote>
+<p>Use <code>getInternalRecorder</code> only after <code>startRecording</code>. It may return <code>NULL</code> according to RecordRTC current state.</p>
+</blockquote>
+<pre class="prettyprint source lang-javascript"><code>// if RecordRTC recording in-progress
+if (recorder.state === 'recording') {
+    // get MediaStreamRecorder
+    var msRecorder = recorder.getInternalRecorder();
+
+    // always check for NULL or verify the recorder type
+    if (msRecorder instanceof MultiStreamRecorder) {
+        // it is NOT NULL
+        // also it is MultiStreamRecorder instance
+        // now we can use these extra methods
+        msRecorder.addStreams([newAudioStream]);
+        msRecorder.resetVideoStreams([screenStream]);
+    }
+}</code></pre><p>Internal recorders can add extra methods. Same as MultiStreamRecorder which is supporting two extra methods:</p>
+<ol>
+<li><code>addStreams</code></li>
+<li><code>resetVideoStreams</code></li>
 </ol>
 <h2>Echo Issues</h2><p>Simply set <code>volume=0</code> or <code>muted=true</code> over <code>&lt;audio&gt;</code> or <code>&lt;video&gt;</code> element:</p>
 <pre class="prettyprint source lang-javascript"><code>videoElement.muted = true;
@@ -603,6 +636,8 @@ var recordVideo = RecordRTC(MediaStream, options);</code></pre><h2><code>pauseRe
 // Legal values are (256, 512, 1024, 2048, 4096, 8192, 16384).
 
 var options = {
+   type: 'audio',
+   recorderType: StereoAudioRecorder,
    bufferSize: 16384
 };
 var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Following values are allowed for buffer-size:</p>
@@ -620,12 +655,21 @@ var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Following values
 // the range 22050 to 96000.
 
 var options = {
+   type: 'audio',
+   recorderType: StereoAudioRecorder,
    sampleRate: 96000
 };
 var recordRTC = RecordRTC(audioStream, options);</code></pre><p>Values for sample-rate must be greater than or equal to 22050 and less than or equal to 96000.</p>
 <p>If you passed invalid value then you'll get blank audio.</p>
 <p>You can pass custom sample-rate values only on Mac (or additionally maybe on Windows 10).</p>
-<h2><code>mimeType</code></h2><p>This option allows you set MediaRecorder output format:</p>
+<h2><code>desiredSampRate</code></h2><p>Set sample rates such as 8K or 16K. Reference: http://stackoverflow.com/a/28977136/552182</p>
+<pre class="prettyprint source lang-javascript"><code>// record 16khz audio
+var options = {
+   type: 'audio',
+   recorderType: StereoAudioRecorder,
+   desiredSampRate: 16 * 1000 // bits-per-sample * 1000
+};
+var recordRTC = RecordRTC(audioStream, options);</code></pre><h2><code>mimeType</code></h2><p>This option allows you set MediaRecorder output format:</p>
 <pre class="prettyprint source lang-javascript"><code>var options = {
   mimeType 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
   bitsPerSecond: 128000
@@ -694,9 +738,6 @@ recordRTC.getFromDisk(function(dataURL) {
 });</code></pre><p>In the above example; you can see that <code>recordRTC</code> instance object is used instead of global <code>RecordRTC</code> object.</p>
 <h2>Promises</h2><pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://cdn.WebRTC-Experiment.com/RecordRTC.js&quot;>&lt;/script>
 
-&lt;!-- link this file as well -->
-&lt;script src=&quot;/dev/RecordRTC.promises.js&quot;>&lt;/script>
-
 &lt;script>
 // use &quot;RecordRTCPromisesHandler&quot; instead of &quot;RecordRTC&quot;
 var recorder = new RecordRTCPromisesHandler(mediaStream, options);
@@ -749,7 +790,7 @@ recorder.stopRecording().then(function(url) {
 </div>
 
 <nav>
-    <h2><a href="/">Homepage</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GetRecorderType.html">GetRecorderType</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="MultiStreamRecorder.html">MultiStreamRecorder</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="RecordRTCConfiguration.html">RecordRTCConfiguration</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#invokeSaveAsDialog">invokeSaveAsDialog</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
+    <h2><a href="/">Homepage</a></h2><h3>Classes</h3><ul><li><a href="CanvasRecorder.html">CanvasRecorder</a></li><li><a href="GetRecorderType.html">GetRecorderType</a></li><li><a href="GifRecorder.html">GifRecorder</a></li><li><a href="MediaStreamRecorder.html">MediaStreamRecorder</a></li><li><a href="MRecordRTC.html">MRecordRTC</a></li><li><a href="MultiStreamRecorder.html">MultiStreamRecorder</a></li><li><a href="RecordRTC.html">RecordRTC</a></li><li><a href="RecordRTCConfiguration.html">RecordRTCConfiguration</a></li><li><a href="RecordRTCPromisesHandler.html">RecordRTCPromisesHandler</a></li><li><a href="StereoAudioRecorder.html">StereoAudioRecorder</a></li><li><a href="Whammy.html">Whammy</a></li><li><a href="WhammyRecorder.html">WhammyRecorder</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bytesToSize">bytesToSize</a></li><li><a href="global.html#DiskStorage">DiskStorage</a></li><li><a href="global.html#invokeSaveAsDialog">invokeSaveAsDialog</a></li><li><a href="global.html#Storage">Storage</a></li></ul>
 </nav>
 
 <br clear="both">
