@@ -150,7 +150,7 @@
         <h4 class="name" id="RecordRTCPromisesHandler"><a href="#RecordRTCPromisesHandler"><span class="type-signature"></span>new RecordRTCPromisesHandler<span class="signature">(mediaStream, config)</span><span class="type-signature"></span></a></h4>
 
         
-        <p class="summary">Promises for RecordRTC</p>
+        <p class="summary">Promises for <a href="RecordRTC.html">RecordRTC</a></p>
         
     
 </dt>
@@ -158,7 +158,7 @@
 
     
     <div class="description">
-        RecordRTCPromisesHandler adds promises support in RecordRTC
+        RecordRTCPromisesHandler adds promises support in <a href="RecordRTC.html">RecordRTC</a>. Try a <a href="https://github.com/muaz-khan/RecordRTC/blob/master/simple-demos/RecordRTCPromisesHandler.html">demo here</a>
     </div>
     
 
@@ -281,7 +281,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4711">line 4711</a>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4807">line 4807</a>
     </li></ul></dd>
     
 
@@ -294,6 +294,370 @@
             <li><a href="https://github.com/muaz-khan/RecordRTC">RecordRTC Source Code</a></li>
         </ul>
     </dd>
+    
+
+    
+</dl>
+
+
+    
+    <h5>Requires:</h5>
+    <ul>
+        <li>module:RecordRTC</li>
+    </ul>
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Throws:</h5>
+    
+            
+
+    <div class="param-desc">
+    
+        Will throw an error if "new" keyword is not used to initiate "RecordRTCPromisesHandler". Also throws error if first argument "MediaStream" is missing.
+    
+    </div>
+
+
+        
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var recorder = new RecordRTCPromisesHandler(mediaStream, options);recorder.startRecording()        .then(successCB)        .catch(errorCB);</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+        <h3 class="subsection-title">Requires</h3>
+
+        <ul>
+            <li>module:RecordRTC</li>
+        </ul>
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id=".self.recordRTC"><a href="#.self.recordRTC"><span class="type-signature">(static) </span>self.recordRTC<span class="type-signature"></span></a></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blob</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Blob</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Access/reach the native <a href="RecordRTC.html">RecordRTC</a> object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4844">line 4844</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var internal = recorder.recordRTC.getInternalRecorder();alert(internal instanceof MediaStreamRecorder);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id=".this.blob"><a href="#.this.blob"><span class="type-signature">(static) </span>this.blob<span class="type-signature"></span></a></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+
+    
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blob</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Blob</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Recorded data as "Blob" object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4932">line 4932</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>recorder.stopRecording().then(function() {    var blob = recorder.getBlob();}).catch(errorCB);</code></pre>
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    
+        <h4 class="name" id=".this.getBlob"><a href="#.this.getBlob"><span class="type-signature">(static) </span>this.getBlob<span class="signature">()</span><span class="type-signature"></span></a></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        This method returns the recorded blob.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4920">line 4920</a>
+    </li></ul></dd>
+    
+
+    
+
     
 
     
@@ -315,13 +679,31 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var recorder = new RecordRTCPromisesHandler(mediaStream, options);recorder.startRecording().then(successCB).catch(errorCB);</code></pre>
+    <pre class="prettyprint"><code>recorder.stopRecording().then(function() {    var blob = recorder.getBlob();}).catch(errorCB);</code></pre>
 
     
 </dd>
 
+        
+            
+<dt>
     
+        <h4 class="name" id=".this.getDataURL"><a href="#.this.getDataURL"><span class="type-signature">(static) </span>this.getDataURL<span class="signature">()</span><span class="type-signature"></span></a></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        This method returns data-url for the recorded blob.
     </div>
+    
+
+    
+
+    
 
     
 
@@ -329,12 +711,241 @@
 
     
 
-     
+
+<dl class="details">
 
     
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4899">line 4899</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>recorder.stopRecording().then(function() {    recorder.getDataURL().then(function(dataURL) {        window.open(dataURL);    }).catch(errorCB);;}).catch(errorCB);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        <h4 class="name" id=".this.startRecording"><a href="#.this.startRecording"><span class="type-signature">(static) </span>this.startRecording<span class="signature">()</span><span class="type-signature"></span></a></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        This method records MediaStream.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4855">line 4855</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>recorder.startRecording()        .then(successCB)        .catch(errorCB);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        <h4 class="name" id=".this.stopRecording"><a href="#.this.stopRecording"><span class="type-signature">(static) </span>this.stopRecording<span class="signature">()</span><span class="type-signature"></span></a></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        This method stops the recording.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="RecordRTC.js.html">RecordRTC.js</a>, <a href="RecordRTC.js.html#line4875">line 4875</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>recorder.stopRecording().then(function() {    var blob = recorder.getBlob();}).catch(errorCB);</code></pre>
+
+    
+</dd>
+
+        </dl>
     
 
     
